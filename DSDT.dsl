@@ -2298,7 +2298,7 @@ DefinitionBlock ("dsdt.aml", "DSDT", 2, "ALASKA", "A M I", 0x00000012)
                 Add (Subtract (M1MX, M1MN), One, M1LN)
                 If (LOr (LEqual (MM64, Zero), LLessEqual (OSYS, 0x07D3)))
                 {
-                    CreateDWordField (BUF0, \_SB.PCI0._Y0F._LEN, MSLN)
+                    CreateQWordField (BUF0, \_SB.PCI0._Y0F._LEN, MSLN)
                     Store (Zero, MSLN)
                 }
                 Else
@@ -3039,56 +3039,18 @@ DefinitionBlock ("dsdt.aml", "DSDT", 2, "ALASKA", "A M I", 0x00000012)
                 {
                     Name (_HID, EisaId ("PNP0103"))
                     Name (_UID, Zero)
-                    Name (BUF0, ResourceTemplate ()
+                    Name (_STA, 0x0F)
+                    Name (_CRS, ResourceTemplate ()
                     {
+                        IRQNoFlags ()
+                            {0}
+                        IRQNoFlags ()
+                            {8}
                         Memory32Fixed (ReadWrite,
                             0xFED00000,         // Address Base
                             0x00000400,         // Address Length
-                            _Y10)
+                            )
                     })
-                    Method (_STA, 0, NotSerialized)
-                    {
-                        If (LGreaterEqual (OSYS, 0x07D1))
-                        {
-                            If (HPAE)
-                            {
-                                Return (0x0F)
-                            }
-                        }
-                        Else
-                        {
-                            If (HPAE)
-                            {
-                                Return (0x0B)
-                            }
-                        }
-
-                        Return (Zero)
-                    }
-
-                    Method (_CRS, 0, Serialized)
-                    {
-                        If (HPAE)
-                        {
-                            CreateDWordField (BUF0, \_SB.PCI0.LPCB.HPET._Y10._BAS, HPT0)
-                            If (LEqual (HPAS, One))
-                            {
-                                Store (0xFED01000, HPT0)
-                            }
-
-                            If (LEqual (HPAS, 0x02))
-                            {
-                                Store (0xFED02000, HPT0)
-                            }
-
-                            If (LEqual (HPAS, 0x03))
-                            {
-                                Store (0xFED03000, HPT0)
-                            }
-                        }
-
-                        Return (BUF0)
-                    }
                 }
 
                 Device (IPIC)
@@ -3198,8 +3160,6 @@ DefinitionBlock ("dsdt.aml", "DSDT", 2, "ALASKA", "A M I", 0x00000012)
                             0x01,               // Alignment
                             0x02,               // Length
                             )
-                        IRQNoFlags ()
-                            {2}
                     })
                 }
 
@@ -3325,8 +3285,6 @@ DefinitionBlock ("dsdt.aml", "DSDT", 2, "ALASKA", "A M I", 0x00000012)
                             0x01,               // Alignment
                             0x08,               // Length
                             )
-                        IRQNoFlags ()
-                            {8}
                     })
                 }
 
@@ -3347,8 +3305,6 @@ DefinitionBlock ("dsdt.aml", "DSDT", 2, "ALASKA", "A M I", 0x00000012)
                             0x10,               // Alignment
                             0x04,               // Length
                             )
-                        IRQNoFlags ()
-                            {0}
                     })
                 }
 
@@ -3487,7 +3443,7 @@ DefinitionBlock ("dsdt.aml", "DSDT", 2, "ALASKA", "A M I", 0x00000012)
                     Mutex (MUT0, 0x00)
                     Method (ENFG, 1, NotSerialized)
                     {
-                        Acquire (MUT0, 0x0FFF)
+                        Acquire (MUT0, 0xFFFF)
                         Store (0x87, INDX)
                         Store (One, INDX)
                         Store (0x55, INDX)
@@ -4404,7 +4360,7 @@ DefinitionBlock ("dsdt.aml", "DSDT", 2, "ALASKA", "A M I", 0x00000012)
                     }
                 }
 
-                Device (COPR)
+                Device (MATH)
                 {
                     Name (_HID, EisaId ("PNP0C04"))
                     Name (_CRS, ResourceTemplate ()
@@ -4573,14 +4529,39 @@ DefinitionBlock ("dsdt.aml", "DSDT", 2, "ALASKA", "A M I", 0x00000012)
                     PMSX,   1
                 }
 
-                Device (PXSX)
+                Device (FWBR)
                 {
                     Name (_ADR, Zero)
-                    Name (_PRW, Package (0x02)
+                    Device (FRWR)
                     {
-                        0x09, 
-                        0x04
-                    })
+                        Name (_ADR, Zero)
+                        Name (_GPE, 0x1A)
+                        Method (_DSM, 4, NotSerialized)
+                        {
+                            Store (Package (0x06)
+                                {
+                                    "fwhub", 
+                                    Buffer (0x04)
+                                    {
+                                        0x00, 0x00, 0x00, 0x00
+                                    }, 
+
+                                    "fwswappedbib", 
+                                    Buffer (0x04)
+                                    {
+                                        0x01, 0x00, 0x00, 0x00
+                                    }, 
+
+                                    "built-in", 
+                                    Buffer (0x01)
+                                    {
+                                        0x00
+                                    }
+                                }, Local0)
+                            DTGP (Arg0, Arg1, Arg2, Arg3, RefOf (Local0))
+                            Return (Local0)
+                        }
+                    }
                 }
 
                 Method (HPME, 0, Serialized)
@@ -4601,7 +4582,7 @@ DefinitionBlock ("dsdt.aml", "DSDT", 2, "ALASKA", "A M I", 0x00000012)
                             }
                         }
 
-                        Notify (PXSX, 0x02)
+                        Notify (FWBR, 0x02)
                     }
                 }
 
@@ -6003,11 +5984,43 @@ DefinitionBlock ("dsdt.aml", "DSDT", 2, "ALASKA", "A M I", 0x00000012)
                 Device (PXSX)
                 {
                     Name (_ADR, Zero)
-                    Name (_PRW, Package (0x02)
+                    Method (_DSM, 4, NotSerialized)
                     {
-                        0x09, 
-                        0x04
-                    })
+                        Store (Package (0x0A)
+                            {
+                                "device-id", 
+                                Buffer (0x04)
+                                {
+                                    0x81, 0x26, 0x00, 0x00
+                                }, 
+
+                                "vendor-id", 
+                                Buffer (0x04)
+                                {
+                                    0x86, 0x80, 0x00, 0x00
+                                }, 
+
+                                "compatible", 
+                                Buffer (0x0D)
+                                {
+                                    "pci8086,2681"
+                                }, 
+
+                                "IOName", 
+                                Buffer (0x0D)
+                                {
+                                    "pci8086,2681"
+                                }, 
+
+                                "name", 
+                                Buffer (0x0D)
+                                {
+                                    "pci8086,2681"
+                                }
+                            }, Local0)
+                        DTGP (Arg0, Arg1, Arg2, Arg3, RefOf (Local0))
+                        Return (Local0)
+                    }
                 }
 
                 Method (HPME, 0, Serialized)
@@ -6056,9 +6069,65 @@ DefinitionBlock ("dsdt.aml", "DSDT", 2, "ALASKA", "A M I", 0x00000012)
                     Return (PR02 ())
                 }
 
-                Device (PEGP)
+                Device (GFX0)
                 {
-                    Name (_ADR, 0xFFFF)
+                    Name (_ADR, Zero)
+                    Name (_SUN, One)
+                    Method (_DSM, 4, NotSerialized)
+                    {
+                        Store (Package (0x0A)
+                            {
+                                "@0,name", 
+                                Buffer (0x0D)
+                                {
+                                    "ATY,Hoolock"
+                                }, 
+
+                                "@1,name", 
+                                Buffer (0x0D)
+                                {
+                                    "ATY,Hoolock"
+                                }, 
+
+                                "@2,name", 
+                                Buffer (0x0D)
+                                {
+                                    "ATY,Hoolock"
+                                }, 
+
+                                "model", 
+                                Buffer (0x13)
+                                {
+                                    "ATI Radeon HD 5770"
+                                }, 
+
+                                "hda-gfx", 
+                                Buffer (0x0A)
+                                {
+                                    "onboard-1"
+                                }
+                            }, Local0)
+                        DTGP (Arg0, Arg1, Arg2, Arg3, RefOf (Local0))
+                        Return (Local0)
+                    }
+                }
+
+                Device (HDAU)
+                {
+                    Name (_ADR, One)
+                    Method (_DSM, 4, NotSerialized)
+                    {
+                        Store (Package (0x02)
+                            {
+                                "hda-gfx", 
+                                Buffer (0x0A)
+                                {
+                                    "onboard-1"
+                                }
+                            }, Local0)
+                        DTGP (Arg0, Arg1, Arg2, Arg3, RefOf (Local0))
+                        Return (Local0)
+                    }
                 }
             }
 
@@ -6157,6 +6226,12 @@ DefinitionBlock ("dsdt.aml", "DSDT", 2, "ALASKA", "A M I", 0x00000012)
             {
                 Notify (\_SB.PCI0.USB7, 0x02)
             }
+
+            Method (_L1A, 0, NotSerialized)
+            {
+                Notify (\_SB.PCI0.RP01.FWBR.FRWR, 0x00)
+            }
+
         }
 
         Device (PWRB)
@@ -6528,9 +6603,9 @@ DefinitionBlock ("dsdt.aml", "DSDT", 2, "ALASKA", "A M I", 0x00000012)
                                         /* 0008 */   0xBD, 0x0C, 0xBA, 0x90, 0xA1, 0xEC, 0x72, 0xF8
                                     }))
                             {
-                                Name (_T_0, Zero)
-                                Store (ToInteger (Arg2), _T_0)
-                                If (LEqual (_T_0, Zero))
+                                Name (T_0, Zero)
+                                Store (ToInteger (Arg2), T_0)
+                                If (LEqual (T_0, Zero))
                                 {
                                     If (LEqual (Arg1, One))
                                     {
@@ -6549,7 +6624,7 @@ DefinitionBlock ("dsdt.aml", "DSDT", 2, "ALASKA", "A M I", 0x00000012)
                                 }
                                 Else
                                 {
-                                    If (LEqual (_T_0, One))
+                                    If (LEqual (T_0, One))
                                     {
                                         If (LEqual (SDGV, 0xFF))
                                         {
@@ -6562,7 +6637,7 @@ DefinitionBlock ("dsdt.aml", "DSDT", 2, "ALASKA", "A M I", 0x00000012)
                                     }
                                     Else
                                     {
-                                        If (LEqual (_T_0, 0x02))
+                                        If (LEqual (T_0, 0x02))
                                         {
                                             Return (SDGV)
                                         }
@@ -6611,9 +6686,9 @@ DefinitionBlock ("dsdt.aml", "DSDT", 2, "ALASKA", "A M I", 0x00000012)
                                         /* 0008 */   0xBD, 0x0C, 0xBA, 0x90, 0xA1, 0xEC, 0x72, 0xF8
                                     }))
                             {
-                                Name (_T_0, Zero)
-                                Store (ToInteger (Arg2), _T_0)
-                                If (LEqual (_T_0, Zero))
+                                Name (T_0, Zero)
+                                Store (ToInteger (Arg2), T_0)
+                                If (LEqual (T_0, Zero))
                                 {
                                     If (LEqual (Arg1, One))
                                     {
@@ -6632,7 +6707,7 @@ DefinitionBlock ("dsdt.aml", "DSDT", 2, "ALASKA", "A M I", 0x00000012)
                                 }
                                 Else
                                 {
-                                    If (LEqual (_T_0, One))
+                                    If (LEqual (T_0, One))
                                     {
                                         If (LEqual (SDGV, 0xFF))
                                         {
@@ -6645,7 +6720,7 @@ DefinitionBlock ("dsdt.aml", "DSDT", 2, "ALASKA", "A M I", 0x00000012)
                                     }
                                     Else
                                     {
-                                        If (LEqual (_T_0, 0x02))
+                                        If (LEqual (T_0, 0x02))
                                         {
                                             Return (SDGV)
                                         }
@@ -6694,9 +6769,9 @@ DefinitionBlock ("dsdt.aml", "DSDT", 2, "ALASKA", "A M I", 0x00000012)
                                         /* 0008 */   0xBD, 0x0C, 0xBA, 0x90, 0xA1, 0xEC, 0x72, 0xF8
                                     }))
                             {
-                                Name (_T_0, Zero)
-                                Store (ToInteger (Arg2), _T_0)
-                                If (LEqual (_T_0, Zero))
+                                Name (T_0, Zero)
+                                Store (ToInteger (Arg2), T_0)
+                                If (LEqual (T_0, Zero))
                                 {
                                     If (LEqual (Arg1, One))
                                     {
@@ -6715,7 +6790,7 @@ DefinitionBlock ("dsdt.aml", "DSDT", 2, "ALASKA", "A M I", 0x00000012)
                                 }
                                 Else
                                 {
-                                    If (LEqual (_T_0, One))
+                                    If (LEqual (T_0, One))
                                     {
                                         If (LEqual (SDGV, 0xFF))
                                         {
@@ -6728,7 +6803,7 @@ DefinitionBlock ("dsdt.aml", "DSDT", 2, "ALASKA", "A M I", 0x00000012)
                                     }
                                     Else
                                     {
-                                        If (LEqual (_T_0, 0x02))
+                                        If (LEqual (T_0, 0x02))
                                         {
                                             Return (SDGV)
                                         }
@@ -6777,9 +6852,9 @@ DefinitionBlock ("dsdt.aml", "DSDT", 2, "ALASKA", "A M I", 0x00000012)
                                         /* 0008 */   0xBD, 0x0C, 0xBA, 0x90, 0xA1, 0xEC, 0x72, 0xF8
                                     }))
                             {
-                                Name (_T_0, Zero)
-                                Store (ToInteger (Arg2), _T_0)
-                                If (LEqual (_T_0, Zero))
+                                Name (T_0, Zero)
+                                Store (ToInteger (Arg2), T_0)
+                                If (LEqual (T_0, Zero))
                                 {
                                     If (LEqual (Arg1, One))
                                     {
@@ -6798,7 +6873,7 @@ DefinitionBlock ("dsdt.aml", "DSDT", 2, "ALASKA", "A M I", 0x00000012)
                                 }
                                 Else
                                 {
-                                    If (LEqual (_T_0, One))
+                                    If (LEqual (T_0, One))
                                     {
                                         If (LEqual (SDGV, 0xFF))
                                         {
@@ -6811,7 +6886,7 @@ DefinitionBlock ("dsdt.aml", "DSDT", 2, "ALASKA", "A M I", 0x00000012)
                                     }
                                     Else
                                     {
-                                        If (LEqual (_T_0, 0x02))
+                                        If (LEqual (T_0, 0x02))
                                         {
                                             Return (SDGV)
                                         }
@@ -6857,6 +6932,31 @@ DefinitionBlock ("dsdt.aml", "DSDT", 2, "ALASKA", "A M I", 0x00000012)
             Method (_PRW, 0, NotSerialized)
             {
                 Return (GPRW (0x0D, 0x04))
+            }
+
+            Method (_DSM, 4, NotSerialized)
+            {
+                Store (Package (0x0D)
+                    {
+                        "AAPL,current-available", 
+                        0x0834, 
+                        "AAPL,current-extra", 
+                        0x0898, 
+                        "AAPL,current-extra-in-sleep", 
+                        0x0640, 
+                        "AAPL,device-internal", 
+                        0x02, 
+                        "AAPL,max-port-current-in-sleep", 
+                        0x0834, 
+                        "AAPL,clock-id", 
+                        0x01, 
+                        Buffer (One)
+                        {
+                            0x00
+                        }
+                    }, Local0)
+                DTGP (Arg0, Arg1, Arg2, Arg3, RefOf (Local0))
+                Return (Local0)
             }
         }
 
@@ -6989,9 +7089,9 @@ DefinitionBlock ("dsdt.aml", "DSDT", 2, "ALASKA", "A M I", 0x00000012)
                                         /* 0008 */   0xBD, 0x0C, 0xBA, 0x90, 0xA1, 0xEC, 0x72, 0xF8
                                     }))
                             {
-                                Name (_T_0, Zero)
-                                Store (ToInteger (Arg2), _T_0)
-                                If (LEqual (_T_0, Zero))
+                                Name (T_0, Zero)
+                                Store (ToInteger (Arg2), T_0)
+                                If (LEqual (T_0, Zero))
                                 {
                                     If (LEqual (Arg1, One))
                                     {
@@ -7010,7 +7110,7 @@ DefinitionBlock ("dsdt.aml", "DSDT", 2, "ALASKA", "A M I", 0x00000012)
                                 }
                                 Else
                                 {
-                                    If (LEqual (_T_0, One))
+                                    If (LEqual (T_0, One))
                                     {
                                         If (LEqual (SDGV, 0xFF))
                                         {
@@ -7023,7 +7123,7 @@ DefinitionBlock ("dsdt.aml", "DSDT", 2, "ALASKA", "A M I", 0x00000012)
                                     }
                                     Else
                                     {
-                                        If (LEqual (_T_0, 0x02))
+                                        If (LEqual (T_0, 0x02))
                                         {
                                             Return (SDGV)
                                         }
@@ -7072,9 +7172,9 @@ DefinitionBlock ("dsdt.aml", "DSDT", 2, "ALASKA", "A M I", 0x00000012)
                                         /* 0008 */   0xBD, 0x0C, 0xBA, 0x90, 0xA1, 0xEC, 0x72, 0xF8
                                     }))
                             {
-                                Name (_T_0, Zero)
-                                Store (ToInteger (Arg2), _T_0)
-                                If (LEqual (_T_0, Zero))
+                                Name (T_0, Zero)
+                                Store (ToInteger (Arg2), T_0)
+                                If (LEqual (T_0, Zero))
                                 {
                                     If (LEqual (Arg1, One))
                                     {
@@ -7093,7 +7193,7 @@ DefinitionBlock ("dsdt.aml", "DSDT", 2, "ALASKA", "A M I", 0x00000012)
                                 }
                                 Else
                                 {
-                                    If (LEqual (_T_0, One))
+                                    If (LEqual (T_0, One))
                                     {
                                         If (LEqual (SDGV, 0xFF))
                                         {
@@ -7106,7 +7206,7 @@ DefinitionBlock ("dsdt.aml", "DSDT", 2, "ALASKA", "A M I", 0x00000012)
                                     }
                                     Else
                                     {
-                                        If (LEqual (_T_0, 0x02))
+                                        If (LEqual (T_0, 0x02))
                                         {
                                             Return (SDGV)
                                         }
@@ -7210,6 +7310,31 @@ DefinitionBlock ("dsdt.aml", "DSDT", 2, "ALASKA", "A M I", 0x00000012)
             Method (_PRW, 0, NotSerialized)
             {
                 Return (GPRW (0x0D, 0x04))
+            }
+
+            Method (_DSM, 4, NotSerialized)
+            {
+                Store (Package (0x0D)
+                    {
+                        "AAPL,current-available", 
+                        0x0834, 
+                        "AAPL,current-extra", 
+                        0x0898, 
+                        "AAPL,current-extra-in-sleep", 
+                        0x0640, 
+                        "AAPL,device-internal", 
+                        0x02, 
+                        "AAPL,max-port-current-in-sleep", 
+                        0x0834, 
+                        "AAPL,clock-id", 
+                        0x02, 
+                        Buffer (One)
+                        {
+                            0x00
+                        }
+                    }, Local0)
+                DTGP (Arg0, Arg1, Arg2, Arg3, RefOf (Local0))
+                Return (Local0)
             }
         }
 
@@ -7669,6 +7794,23 @@ DefinitionBlock ("dsdt.aml", "DSDT", 2, "ALASKA", "A M I", 0x00000012)
             Method (_PRW, 0, NotSerialized)
             {
                 Return (GPRW (0x0D, 0x04))
+            }
+
+            Method (_DSM, 4, NotSerialized)
+            {
+                Store (Package (0x04)
+                    {
+                        "layout-id", 
+                        Buffer (0x04)
+                        {
+                            0x01, 0x00, 0x00, 0x00
+                        }, 
+
+                        "PinConfigurations", 
+                        Buffer (Zero) {}
+                    }, Local0)
+                DTGP (Arg0, Arg1, Arg2, Arg3, RefOf (Local0))
+                Return (Local0)
             }
         }
 
@@ -8212,51 +8354,51 @@ DefinitionBlock ("dsdt.aml", "DSDT", 2, "ALASKA", "A M I", 0x00000012)
     Method (UXDV, 1, NotSerialized)
     {
         Store (0xFF, Local0)
-        Name (_T_0, Zero)
-        Store (Add (Arg0, Zero), _T_0)
-        If (LEqual (_T_0, 0x03F8))
+        Name (T_0, Zero)
+        Store (Add (Arg0, Zero), T_0)
+        If (LEqual (T_0, 0x03F8))
         {
             Store (Zero, Local0)
         }
         Else
         {
-            If (LEqual (_T_0, 0x02F8))
+            If (LEqual (T_0, 0x02F8))
             {
                 Store (One, Local0)
             }
             Else
             {
-                If (LEqual (_T_0, 0x0220))
+                If (LEqual (T_0, 0x0220))
                 {
                     Store (0x02, Local0)
                 }
                 Else
                 {
-                    If (LEqual (_T_0, 0x0228))
+                    If (LEqual (T_0, 0x0228))
                     {
                         Store (0x03, Local0)
                     }
                     Else
                     {
-                        If (LEqual (_T_0, 0x0238))
+                        If (LEqual (T_0, 0x0238))
                         {
                             Store (0x04, Local0)
                         }
                         Else
                         {
-                            If (LEqual (_T_0, 0x02E8))
+                            If (LEqual (T_0, 0x02E8))
                             {
                                 Store (0x05, Local0)
                             }
                             Else
                             {
-                                If (LEqual (_T_0, 0x0338))
+                                If (LEqual (T_0, 0x0338))
                                 {
                                     Store (0x06, Local0)
                                 }
                                 Else
                                 {
-                                    If (LEqual (_T_0, 0x03E8))
+                                    If (LEqual (T_0, 0x03E8))
                                     {
                                         Store (0x07, Local0)
                                     }
@@ -8273,9 +8415,9 @@ DefinitionBlock ("dsdt.aml", "DSDT", 2, "ALASKA", "A M I", 0x00000012)
 
     Method (RRIO, 4, NotSerialized)
     {
-        Name (_T_0, Zero)
-        Store (Add (Arg0, Zero), _T_0)
-        If (LEqual (_T_0, Zero))
+        Name (T_0, Zero)
+        Store (Add (Arg0, Zero), T_0)
+        If (LEqual (T_0, Zero))
         {
             Store (Zero, CALE)
             Store (UXDV (Arg2), Local0)
@@ -8291,7 +8433,7 @@ DefinitionBlock ("dsdt.aml", "DSDT", 2, "ALASKA", "A M I", 0x00000012)
         }
         Else
         {
-            If (LEqual (_T_0, One))
+            If (LEqual (T_0, One))
             {
                 Store (Zero, CBLE)
                 Store (UXDV (Arg2), Local0)
@@ -8307,7 +8449,7 @@ DefinitionBlock ("dsdt.aml", "DSDT", 2, "ALASKA", "A M I", 0x00000012)
             }
             Else
             {
-                If (LEqual (_T_0, 0x02))
+                If (LEqual (T_0, 0x02))
                 {
                     Store (Zero, LTLE)
                     If (LEqual (Arg2, 0x0378))
@@ -8332,7 +8474,7 @@ DefinitionBlock ("dsdt.aml", "DSDT", 2, "ALASKA", "A M I", 0x00000012)
                 }
                 Else
                 {
-                    If (LEqual (_T_0, 0x03))
+                    If (LEqual (T_0, 0x03))
                     {
                         Store (Zero, FDLE)
                         If (LEqual (Arg2, 0x03F0))
@@ -8352,7 +8494,7 @@ DefinitionBlock ("dsdt.aml", "DSDT", 2, "ALASKA", "A M I", 0x00000012)
                     }
                     Else
                     {
-                        If (LEqual (_T_0, 0x08))
+                        If (LEqual (T_0, 0x08))
                         {
                             If (LEqual (Arg2, 0x0200))
                             {
@@ -8380,7 +8522,7 @@ DefinitionBlock ("dsdt.aml", "DSDT", 2, "ALASKA", "A M I", 0x00000012)
                         }
                         Else
                         {
-                            If (LEqual (_T_0, 0x09))
+                            If (LEqual (T_0, 0x09))
                             {
                                 If (LEqual (Arg2, 0x0200))
                                 {
@@ -8408,7 +8550,7 @@ DefinitionBlock ("dsdt.aml", "DSDT", 2, "ALASKA", "A M I", 0x00000012)
                             }
                             Else
                             {
-                                If (LEqual (_T_0, 0x0A))
+                                If (LEqual (T_0, 0x0A))
                                 {
                                     If (LOr (LEqual (Arg2, 0x60), LEqual (Arg2, 0x64)))
                                     {
@@ -8424,7 +8566,7 @@ DefinitionBlock ("dsdt.aml", "DSDT", 2, "ALASKA", "A M I", 0x00000012)
                                 }
                                 Else
                                 {
-                                    If (LEqual (_T_0, 0x0B))
+                                    If (LEqual (T_0, 0x0B))
                                     {
                                         If (LOr (LEqual (Arg2, 0x62), LEqual (Arg2, 0x66)))
                                         {
@@ -8440,7 +8582,7 @@ DefinitionBlock ("dsdt.aml", "DSDT", 2, "ALASKA", "A M I", 0x00000012)
                                     }
                                     Else
                                     {
-                                        If (LEqual (_T_0, 0x0C))
+                                        If (LEqual (T_0, 0x0C))
                                         {
                                             If (LEqual (Arg2, 0x2E))
                                             {
@@ -8468,7 +8610,7 @@ DefinitionBlock ("dsdt.aml", "DSDT", 2, "ALASKA", "A M I", 0x00000012)
                                         }
                                         Else
                                         {
-                                            If (LEqual (_T_0, 0x0D))
+                                            If (LEqual (T_0, 0x0D))
                                             {
                                                 If (LEqual (Arg2, 0x2E))
                                                 {
@@ -8528,7 +8670,7 @@ DefinitionBlock ("dsdt.aml", "DSDT", 2, "ALASKA", "A M I", 0x00000012)
         }
     }
 
-    Scope (_SB.PCI0.PEG0.PEGP)
+    Scope (_SB.PCI0.PEG0.GFX0)
     {
         Method (_PRW, 0, NotSerialized)
         {
@@ -8562,7 +8704,7 @@ DefinitionBlock ("dsdt.aml", "DSDT", 2, "ALASKA", "A M I", 0x00000012)
 
     Scope (_SB.PCI0)
     {
-        Device (GFX0)
+        Device (IGPU)
         {
             Name (_ADR, 0x00020000)
             Method (PCPC, 0, NotSerialized)
@@ -9844,7 +9986,7 @@ DefinitionBlock ("dsdt.aml", "DSDT", 2, "ALASKA", "A M I", 0x00000012)
                     }
                     Else
                     {
-                        Notify (GFX0, Arg1)
+                        Notify (IGPU, Arg1)
                     }
                 }
 
@@ -9854,7 +9996,7 @@ DefinitionBlock ("dsdt.aml", "DSDT", 2, "ALASKA", "A M I", 0x00000012)
                 }
                 Else
                 {
-                    Notify (GFX0, 0x80)
+                    Notify (IGPU, 0x80)
                 }
 
                 Return (Zero)
@@ -10159,6 +10301,39 @@ DefinitionBlock ("dsdt.aml", "DSDT", 2, "ALASKA", "A M I", 0x00000012)
         }
     }
 
+    Method (DTGP, 5, NotSerialized)
+    {
+        If (LEqual (Arg0, Buffer (0x10)
+                {
+                    /* 0000 */    0xC6, 0xB7, 0xB5, 0xA0, 0x18, 0x13, 0x1C, 0x44, 
+                    /* 0008 */    0xB0, 0xC9, 0xFE, 0x69, 0x5E, 0xAF, 0x94, 0x9B
+                }))
+        {
+            If (LEqual (Arg1, One))
+            {
+                If (LEqual (Arg2, Zero))
+                {
+                    Store (Buffer (One)
+                        {
+                            0x03
+                        }, Arg4)
+                    Return (One)
+                }
+
+                If (LEqual (Arg2, One))
+                {
+                    Return (One)
+                }
+            }
+        }
+
+        Store (Buffer (One)
+            {
+                0x00
+            }, Arg4)
+        Return (Zero)
+    }
+
     Method (_WAK, 1, Serialized)
     {
         P8XH (One, 0xAB)
@@ -10222,9 +10397,9 @@ DefinitionBlock ("dsdt.aml", "DSDT", 2, "ALASKA", "A M I", 0x00000012)
                     Store (\_SB.PCI0.LPCB.H_EC.LSTE, LIDS)
                     If (IGDS)
                     {
-                        If (\_SB.PCI0.GFX0.GLID (LIDS))
+                        If (\_SB.PCI0.IGPU.GLID (LIDS))
                         {
-                            Or (0x80000000, \_SB.PCI0.GFX0.CLID, \_SB.PCI0.GFX0.CLID)
+                            Or (0x80000000, \_SB.PCI0.IGPU.CLID, \_SB.PCI0.IGPU.CLID)
                         }
                     }
 
@@ -10661,42 +10836,42 @@ DefinitionBlock ("dsdt.aml", "DSDT", 2, "ALASKA", "A M I", 0x00000012)
     {
         If (LEqual (And (DID1, 0x0F00), 0x0400))
         {
-            Notify (\_SB.PCI0.GFX0.DD01, Arg0)
+            Notify (\_SB.PCI0.IGPU.DD01, Arg0)
         }
 
         If (LEqual (And (DID2, 0x0F00), 0x0400))
         {
-            Notify (\_SB.PCI0.GFX0.DD02, Arg0)
+            Notify (\_SB.PCI0.IGPU.DD02, Arg0)
         }
 
         If (LEqual (And (DID3, 0x0F00), 0x0400))
         {
-            Notify (\_SB.PCI0.GFX0.DD03, Arg0)
+            Notify (\_SB.PCI0.IGPU.DD03, Arg0)
         }
 
         If (LEqual (And (DID4, 0x0F00), 0x0400))
         {
-            Notify (\_SB.PCI0.GFX0.DD04, Arg0)
+            Notify (\_SB.PCI0.IGPU.DD04, Arg0)
         }
 
         If (LEqual (And (DID5, 0x0F00), 0x0400))
         {
-            Notify (\_SB.PCI0.GFX0.DD05, Arg0)
+            Notify (\_SB.PCI0.IGPU.DD05, Arg0)
         }
 
         If (LEqual (And (DID6, 0x0F00), 0x0400))
         {
-            Notify (\_SB.PCI0.GFX0.DD06, Arg0)
+            Notify (\_SB.PCI0.IGPU.DD06, Arg0)
         }
 
         If (LEqual (And (DID7, 0x0F00), 0x0400))
         {
-            Notify (\_SB.PCI0.GFX0.DD07, Arg0)
+            Notify (\_SB.PCI0.IGPU.DD07, Arg0)
         }
 
         If (LEqual (And (DID8, 0x0F00), 0x0400))
         {
-            Notify (\_SB.PCI0.GFX0.DD08, Arg0)
+            Notify (\_SB.PCI0.IGPU.DD08, Arg0)
         }
     }
 
@@ -10753,7 +10928,7 @@ DefinitionBlock ("dsdt.aml", "DSDT", 2, "ALASKA", "A M I", 0x00000012)
             }
 
             Notify (\_SB.PCI0.PEG0, 0x02)
-            Notify (\_SB.PCI0.PEG0.PEGP, 0x02)
+            Notify (\_SB.PCI0.PEG0.GFX0, 0x02)
             Notify (\_SB.PCI0.PEG1, 0x02)
             Notify (\_SB.PCI0.PEG2, 0x02)
             Notify (\_SB.PCI0.PEG3, 0x02)
@@ -10968,9 +11143,9 @@ DefinitionBlock ("dsdt.aml", "DSDT", 2, "ALASKA", "A M I", 0x00000012)
 
         Method (_L06, 0, NotSerialized)
         {
-            If (LAnd (\_SB.PCI0.GFX0.GSSE, LNot (GSMI)))
+            If (LAnd (\_SB.PCI0.IGPU.GSSE, LNot (GSMI)))
             {
-                \_SB.PCI0.GFX0.GSCI ()
+                \_SB.PCI0.IGPU.GSCI ()
             }
         }
 
@@ -11481,7 +11656,7 @@ DefinitionBlock ("dsdt.aml", "DSDT", 2, "ALASKA", "A M I", 0x00000012)
         })
         Device (WMI1)
         {
-            Name (_HID, "pnp0c14")
+            Name (_HID, "PNP0C14")
             Name (_UID, "MXM2")
             Name (_WDG, Buffer (0x14)
             {
@@ -11510,7 +11685,7 @@ DefinitionBlock ("dsdt.aml", "DSDT", 2, "ALASKA", "A M I", 0x00000012)
             Name (_UID, One)
             Method (_STA, 0, NotSerialized)
             {
-                Store (0x03, ^^^GFX0.CLID)
+                Store (0x03, ^^^IGPU.CLID)
                 Return (Zero)
             }
 
@@ -11606,7 +11781,7 @@ DefinitionBlock ("dsdt.aml", "DSDT", 2, "ALASKA", "A M I", 0x00000012)
 
     Device (_SB.PCI0.DOCK)
     {
-        Name (_HID, "ABCDEFGH")
+        Name (_HID, "ABCDEF00")
         Name (_CID, EisaId ("PNP0C15"))
         Name (_UID, 0x02)
         Method (_STA, 0, NotSerialized)

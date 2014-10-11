@@ -1974,7 +1974,7 @@ DefinitionBlock ("dsdt.aml", "DSDT", 2, "ALASKA", "A M I", 0x00000A06)
                     0x02000000,         // Range Minimum
                     0xFFDFFFFF,         // Range Maximum
                     0x00000000,         // Translation Offset
-                    0xFDFC0000,         // Length
+                    0xFDE00000,         // Length
                     ,, _Y04, AddressRangeMemory, TypeStatic)
                 QWordMemory (ResourceProducer, PosDecode, MinFixed, MaxFixed, Cacheable, ReadWrite,
                     0x0000000000000000, // Granularity
@@ -2054,15 +2054,15 @@ DefinitionBlock ("dsdt.aml", "DSDT", 2, "ALASKA", "A M I", 0x00000A06)
                     Add (MIN3, Decrement (Local0), MAX3)
                     If (LOr (MALH, MALL))
                     {
-                        CreateDWordField (CRS1, \_SB.PCI0._Y05._MIN, MN8L)
+                        CreateQWordField (CRS1, \_SB.PCI0._Y05._MIN, MN8L)
                         Add (0x94, 0x04, Local0)
                         CreateDWordField (CRS1, Local0, MN8H)
                         Store (MABL, MN8L)
                         Store (MABH, MN8H)
-                        CreateDWordField (CRS1, \_SB.PCI0._Y05._MAX, MX8L)
+                        CreateQWordField (CRS1, \_SB.PCI0._Y05._MAX, MX8L)
                         Add (0x9C, 0x04, Local1)
                         CreateDWordField (CRS1, Local1, MX8H)
-                        CreateDWordField (CRS1, \_SB.PCI0._Y05._LEN, LN8L)
+                        CreateQWordField (CRS1, \_SB.PCI0._Y05._LEN, LN8L)
                         Add (0xAC, 0x04, Local2)
                         CreateDWordField (CRS1, Local2, LN8H)
                         Store (MABL, MN8L)
@@ -2100,13 +2100,13 @@ DefinitionBlock ("dsdt.aml", "DSDT", 2, "ALASKA", "A M I", 0x00000A06)
                     Add (MIN5, Decrement (Local1), MAX5)
                     If (LOr (MALH, MALL))
                     {
-                        CreateDWordField (CRS2, \_SB.PCI0._Y09._MIN, MN9L)
+                        CreateQWordField (CRS2, \_SB.PCI0._Y09._MIN, MN9L)
                         Add (0x48, 0x04, Local0)
                         CreateDWordField (CRS2, Local0, MN9H)
-                        CreateDWordField (CRS2, \_SB.PCI0._Y09._MAX, MX9L)
+                        CreateQWordField (CRS2, \_SB.PCI0._Y09._MAX, MX9L)
                         Add (0x50, 0x04, Local1)
                         CreateDWordField (CRS2, Local1, MX9H)
-                        CreateDWordField (CRS2, \_SB.PCI0._Y09._LEN, LN9L)
+                        CreateQWordField (CRS2, \_SB.PCI0._Y09._LEN, LN9L)
                         Add (0x60, 0x04, Local2)
                         CreateDWordField (CRS2, Local2, LN9H)
                         Store (MABL, MN9L)
@@ -2186,7 +2186,7 @@ DefinitionBlock ("dsdt.aml", "DSDT", 2, "ALASKA", "A M I", 0x00000A06)
                 }
             }
 
-            Device (SBRG)
+            Device (LPCB)
             {
                 Name (_ADR, 0x001F0000)
                 Method (SPTS, 1, NotSerialized)
@@ -2452,16 +2452,16 @@ DefinitionBlock ("dsdt.aml", "DSDT", 2, "ALASKA", "A M I", 0x00000A06)
                             0x0000,             // Range Minimum
                             0x0000,             // Range Maximum
                             0x00,               // Alignment
-                            0x00,               // Length
+                            0x01,               // Length
                             )
                     })
                     Method (_CRS, 0, NotSerialized)
                     {
                         If (LAnd (LLess (SP1O, 0x03F0), LGreater (SP1O, 0xF0)))
                         {
-                            CreateWordField (CRS, \_SB.PCI0.SBRG.SIO1._Y12._MIN, GPI0)
-                            CreateWordField (CRS, \_SB.PCI0.SBRG.SIO1._Y12._MAX, GPI1)
-                            CreateByteField (CRS, \_SB.PCI0.SBRG.SIO1._Y12._LEN, GPIL)
+                            CreateWordField (CRS, \_SB.PCI0.LPCB.SIO1._Y12._MIN, GPI0)
+                            CreateWordField (CRS, \_SB.PCI0.LPCB.SIO1._Y12._MAX, GPI1)
+                            CreateByteField (CRS, \_SB.PCI0.LPCB.SIO1._Y12._LEN, GPIL)
                             Store (SP1O, GPI0)
                             Store (SP1O, GPI1)
                             Store (0x02, GPIL)
@@ -2469,9 +2469,9 @@ DefinitionBlock ("dsdt.aml", "DSDT", 2, "ALASKA", "A M I", 0x00000A06)
 
                         If (IO1B)
                         {
-                            CreateWordField (CRS, \_SB.PCI0.SBRG.SIO1._Y13._MIN, GP10)
-                            CreateWordField (CRS, \_SB.PCI0.SBRG.SIO1._Y13._MAX, GP11)
-                            CreateByteField (CRS, \_SB.PCI0.SBRG.SIO1._Y13._LEN, GPL1)
+                            CreateWordField (CRS, \_SB.PCI0.LPCB.SIO1._Y13._MIN, GP10)
+                            CreateWordField (CRS, \_SB.PCI0.LPCB.SIO1._Y13._MAX, GP11)
+                            CreateByteField (CRS, \_SB.PCI0.LPCB.SIO1._Y13._LEN, GPL1)
                             Store (IO1B, GP10)
                             Store (IO1B, GP11)
                             Store (IO1L, GPL1)
@@ -2479,9 +2479,9 @@ DefinitionBlock ("dsdt.aml", "DSDT", 2, "ALASKA", "A M I", 0x00000A06)
 
                         If (IO2B)
                         {
-                            CreateWordField (CRS, \_SB.PCI0.SBRG.SIO1._Y14._MIN, GP20)
-                            CreateWordField (CRS, \_SB.PCI0.SBRG.SIO1._Y14._MAX, GP21)
-                            CreateByteField (CRS, \_SB.PCI0.SBRG.SIO1._Y14._LEN, GPL2)
+                            CreateWordField (CRS, \_SB.PCI0.LPCB.SIO1._Y14._MIN, GP20)
+                            CreateWordField (CRS, \_SB.PCI0.LPCB.SIO1._Y14._MAX, GP21)
+                            CreateByteField (CRS, \_SB.PCI0.LPCB.SIO1._Y14._LEN, GPL2)
                             Store (IO2B, GP20)
                             Store (IO2B, GP21)
                             Store (IO2L, GPL2)
@@ -2489,9 +2489,9 @@ DefinitionBlock ("dsdt.aml", "DSDT", 2, "ALASKA", "A M I", 0x00000A06)
 
                         If (IO3B)
                         {
-                            CreateWordField (CRS, \_SB.PCI0.SBRG.SIO1._Y14._MIN, GP30)
-                            CreateWordField (CRS, \_SB.PCI0.SBRG.SIO1._Y14._MAX, GP31)
-                            CreateByteField (CRS, \_SB.PCI0.SBRG.SIO1._Y14._LEN, GPL3)
+                            CreateWordField (CRS, \_SB.PCI0.LPCB.SIO1._Y14._MIN, GP30)
+                            CreateWordField (CRS, \_SB.PCI0.LPCB.SIO1._Y14._MAX, GP31)
+                            CreateByteField (CRS, \_SB.PCI0.LPCB.SIO1._Y14._LEN, GPL3)
                             Store (IO3B, GP30)
                             Store (IO2B, GP31)
                             Store (IO3L, GPL3)
@@ -2527,7 +2527,7 @@ DefinitionBlock ("dsdt.aml", "DSDT", 2, "ALASKA", "A M I", 0x00000A06)
                     Mutex (MUT0, 0x00)
                     Method (ENFG, 1, NotSerialized)
                     {
-                        Acquire (MUT0, 0x0FFF)
+                        Acquire (MUT0, 0xFFFF)
                         Store (0x87, INDX)
                         Store (0x87, INDX)
                         Store (Arg0, LDN)
@@ -2727,11 +2727,11 @@ DefinitionBlock ("dsdt.aml", "DSDT", 2, "ALASKA", "A M I", 0x00000A06)
                         DMA (Compatibility, NotBusMaster, Transfer8, _Y16)
                             {}
                     })
-                    CreateWordField (CRS1, \_SB.PCI0.SBRG.SIO1._Y15._INT, IRQM)
-                    CreateByteField (CRS1, \_SB.PCI0.SBRG.SIO1._Y16._DMA, DMAM)
-                    CreateWordField (CRS1, \_SB.PCI0.SBRG.SIO1._Y17._MIN, IO11)
-                    CreateWordField (CRS1, \_SB.PCI0.SBRG.SIO1._Y17._MAX, IO12)
-                    CreateByteField (CRS1, \_SB.PCI0.SBRG.SIO1._Y17._LEN, LEN1)
+                    CreateWordField (CRS1, \_SB.PCI0.LPCB.SIO1._Y15._INT, IRQM)
+                    CreateByteField (CRS1, \_SB.PCI0.LPCB.SIO1._Y16._DMA, DMAM)
+                    CreateWordField (CRS1, \_SB.PCI0.LPCB.SIO1._Y17._MIN, IO11)
+                    CreateWordField (CRS1, \_SB.PCI0.LPCB.SIO1._Y17._MAX, IO12)
+                    CreateByteField (CRS1, \_SB.PCI0.LPCB.SIO1._Y17._LEN, LEN1)
                     Name (CRS2, ResourceTemplate ()
                     {
                         IO (Decode16,
@@ -2751,14 +2751,14 @@ DefinitionBlock ("dsdt.aml", "DSDT", 2, "ALASKA", "A M I", 0x00000A06)
                         DMA (Compatibility, NotBusMaster, Transfer8, _Y19)
                             {2}
                     })
-                    CreateWordField (CRS2, \_SB.PCI0.SBRG.SIO1._Y18._INT, IRQE)
-                    CreateByteField (CRS2, \_SB.PCI0.SBRG.SIO1._Y19._DMA, DMAE)
-                    CreateWordField (CRS2, \_SB.PCI0.SBRG.SIO1._Y1A._MIN, IO21)
-                    CreateWordField (CRS2, \_SB.PCI0.SBRG.SIO1._Y1A._MAX, IO22)
-                    CreateByteField (CRS2, \_SB.PCI0.SBRG.SIO1._Y1A._LEN, LEN2)
-                    CreateWordField (CRS2, \_SB.PCI0.SBRG.SIO1._Y1B._MIN, IO31)
-                    CreateWordField (CRS2, \_SB.PCI0.SBRG.SIO1._Y1B._MAX, IO32)
-                    CreateByteField (CRS2, \_SB.PCI0.SBRG.SIO1._Y1B._LEN, LEN3)
+                    CreateWordField (CRS2, \_SB.PCI0.LPCB.SIO1._Y18._INT, IRQE)
+                    CreateByteField (CRS2, \_SB.PCI0.LPCB.SIO1._Y19._DMA, DMAE)
+                    CreateWordField (CRS2, \_SB.PCI0.LPCB.SIO1._Y1A._MIN, IO21)
+                    CreateWordField (CRS2, \_SB.PCI0.LPCB.SIO1._Y1A._MAX, IO22)
+                    CreateByteField (CRS2, \_SB.PCI0.LPCB.SIO1._Y1A._LEN, LEN2)
+                    CreateWordField (CRS2, \_SB.PCI0.LPCB.SIO1._Y1B._MIN, IO31)
+                    CreateWordField (CRS2, \_SB.PCI0.LPCB.SIO1._Y1B._MAX, IO32)
+                    CreateByteField (CRS2, \_SB.PCI0.LPCB.SIO1._Y1B._LEN, LEN3)
                     Method (DCRS, 2, NotSerialized)
                     {
                         ENFG (CGLD (Arg0))
@@ -3118,7 +3118,7 @@ DefinitionBlock ("dsdt.aml", "DSDT", 2, "ALASKA", "A M I", 0x00000A06)
                 Device (FDC)
                 {
                     Name (_HID, EisaId ("PNP0700"))
-                    Name (_FDE, Package (0x05)
+                    Name (_FDE, Buffer (0x05)
                     {
                         One, 
                         Zero, 
@@ -3644,9 +3644,9 @@ DefinitionBlock ("dsdt.aml", "DSDT", 2, "ALASKA", "A M I", 0x00000A06)
                     {
                         If (LAnd (LLess (SP2O, 0x03F0), LGreater (SP2O, 0xF0)))
                         {
-                            CreateWordField (C2S, \_SB.PCI0.SBRG.SIO2._Y1C._MIN, GPI0)
-                            CreateWordField (C2S, \_SB.PCI0.SBRG.SIO2._Y1C._MAX, GPI1)
-                            CreateByteField (C2S, \_SB.PCI0.SBRG.SIO2._Y1C._LEN, GPIL)
+                            CreateWordField (C2S, \_SB.PCI0.LPCB.SIO2._Y1C._MIN, GPI0)
+                            CreateWordField (C2S, \_SB.PCI0.LPCB.SIO2._Y1C._MAX, GPI1)
+                            CreateByteField (C2S, \_SB.PCI0.LPCB.SIO2._Y1C._LEN, GPIL)
                             Store (SP2O, GPI0)
                             Store (SP2O, GPI1)
                             Store (0x02, GPIL)
@@ -3682,7 +3682,7 @@ DefinitionBlock ("dsdt.aml", "DSDT", 2, "ALASKA", "A M I", 0x00000A06)
                     Mutex (MUT0, 0x00)
                     Method (E2FG, 1, NotSerialized)
                     {
-                        Acquire (MUT0, 0x0FFF)
+                        Acquire (MUT0, 0xFFFF)
                         Store (ENTK, INDX)
                         Store (ENTK, INDX)
                         Store (Arg0, LDN)
@@ -3815,11 +3815,11 @@ DefinitionBlock ("dsdt.aml", "DSDT", 2, "ALASKA", "A M I", 0x00000A06)
                         DMA (Compatibility, NotBusMaster, Transfer8, _Y1E)
                             {}
                     })
-                    CreateWordField (CRS3, \_SB.PCI0.SBRG.SIO2._Y1D._INT, IRQS)
-                    CreateByteField (CRS3, \_SB.PCI0.SBRG.SIO2._Y1E._DMA, DMAS)
-                    CreateWordField (CRS3, \_SB.PCI0.SBRG.SIO2._Y1F._MIN, IO61)
-                    CreateWordField (CRS3, \_SB.PCI0.SBRG.SIO2._Y1F._MAX, IO62)
-                    CreateByteField (CRS3, \_SB.PCI0.SBRG.SIO2._Y1F._LEN, LEN8)
+                    CreateWordField (CRS3, \_SB.PCI0.LPCB.SIO2._Y1D._INT, IRQS)
+                    CreateByteField (CRS3, \_SB.PCI0.LPCB.SIO2._Y1E._DMA, DMAS)
+                    CreateWordField (CRS3, \_SB.PCI0.LPCB.SIO2._Y1F._MIN, IO61)
+                    CreateWordField (CRS3, \_SB.PCI0.LPCB.SIO2._Y1F._MAX, IO62)
+                    CreateByteField (CRS3, \_SB.PCI0.LPCB.SIO2._Y1F._LEN, LEN8)
                     Method (DCRL, 2, NotSerialized)
                     {
                         E2FG (CGLY (Arg0))
@@ -4500,9 +4500,9 @@ DefinitionBlock ("dsdt.aml", "DSDT", 2, "ALASKA", "A M I", 0x00000A06)
                     {
                         If (LAnd (LLess (SP3O, 0x03F0), LGreater (SP3O, 0xF0)))
                         {
-                            CreateWordField (C3S, \_SB.PCI0.SBRG.SIO3._Y20._MIN, GPI2)
-                            CreateWordField (C3S, \_SB.PCI0.SBRG.SIO3._Y20._MAX, GPI3)
-                            CreateByteField (C3S, \_SB.PCI0.SBRG.SIO3._Y20._LEN, GPIM)
+                            CreateWordField (C3S, \_SB.PCI0.LPCB.SIO3._Y20._MIN, GPI2)
+                            CreateWordField (C3S, \_SB.PCI0.LPCB.SIO3._Y20._MAX, GPI3)
+                            CreateByteField (C3S, \_SB.PCI0.LPCB.SIO3._Y20._LEN, GPIM)
                             Store (SP3O, GPI2)
                             Store (SP3O, GPI3)
                             Store (0x02, GPIM)
@@ -4538,7 +4538,7 @@ DefinitionBlock ("dsdt.aml", "DSDT", 2, "ALASKA", "A M I", 0x00000A06)
                     Mutex (MUT1, 0x00)
                     Method (ENF3, 1, NotSerialized)
                     {
-                        Acquire (MUT1, 0x0FFF)
+                        Acquire (MUT1, 0xFFFF)
                         Store (ENT3, IND3)
                         Store (ENT3, IND3)
                         Store (Arg0, LDN)
@@ -4671,11 +4671,11 @@ DefinitionBlock ("dsdt.aml", "DSDT", 2, "ALASKA", "A M I", 0x00000A06)
                         DMA (Compatibility, NotBusMaster, Transfer8, _Y22)
                             {}
                     })
-                    CreateWordField (CRS4, \_SB.PCI0.SBRG.SIO3._Y21._INT, IRQS)
-                    CreateByteField (CRS4, \_SB.PCI0.SBRG.SIO3._Y22._DMA, DMAQ)
-                    CreateWordField (CRS4, \_SB.PCI0.SBRG.SIO3._Y23._MIN, IO71)
-                    CreateWordField (CRS4, \_SB.PCI0.SBRG.SIO3._Y23._MAX, IO72)
-                    CreateByteField (CRS4, \_SB.PCI0.SBRG.SIO3._Y23._LEN, LEN9)
+                    CreateWordField (CRS4, \_SB.PCI0.LPCB.SIO3._Y21._INT, IRQS)
+                    CreateByteField (CRS4, \_SB.PCI0.LPCB.SIO3._Y22._DMA, DMAQ)
+                    CreateWordField (CRS4, \_SB.PCI0.LPCB.SIO3._Y23._MIN, IO71)
+                    CreateWordField (CRS4, \_SB.PCI0.LPCB.SIO3._Y23._MAX, IO72)
+                    CreateByteField (CRS4, \_SB.PCI0.LPCB.SIO3._Y23._LEN, LEN9)
                     Method (DCR3, 2, NotSerialized)
                     {
                         ENF3 (CGL3 (Arg0))
@@ -5339,7 +5339,7 @@ DefinitionBlock ("dsdt.aml", "DSDT", 2, "ALASKA", "A M I", 0x00000A06)
                     })
                 }
 
-                Device (PIC)
+                Device (IPIC)
                 {
                     Name (_HID, EisaId ("PNP0000"))
                     Name (_CRS, ResourceTemplate ()
@@ -5356,12 +5356,10 @@ DefinitionBlock ("dsdt.aml", "DSDT", 2, "ALASKA", "A M I", 0x00000A06)
                             0x00,               // Alignment
                             0x02,               // Length
                             )
-                        IRQNoFlags ()
-                            {2}
                     })
                 }
 
-                Device (DMAD)
+                Device (DMAC)
                 {
                     Name (_HID, EisaId ("PNP0200"))
                     Name (_CRS, ResourceTemplate ()
@@ -5407,7 +5405,7 @@ DefinitionBlock ("dsdt.aml", "DSDT", 2, "ALASKA", "A M I", 0x00000A06)
                     })
                 }
 
-                Device (TMR)
+                Device (TIMR)
                 {
                     Name (_HID, EisaId ("PNP0100"))
                     Name (_CRS, ResourceTemplate ()
@@ -5418,12 +5416,10 @@ DefinitionBlock ("dsdt.aml", "DSDT", 2, "ALASKA", "A M I", 0x00000A06)
                             0x00,               // Alignment
                             0x04,               // Length
                             )
-                        IRQNoFlags ()
-                            {0}
                     })
                 }
 
-                Device (RTC0)
+                Device (RTC)
                 {
                     Name (_HID, EisaId ("PNP0B00"))
                     Name (_CRS, ResourceTemplate ()
@@ -5433,22 +5429,6 @@ DefinitionBlock ("dsdt.aml", "DSDT", 2, "ALASKA", "A M I", 0x00000A06)
                             0x0070,             // Range Maximum
                             0x00,               // Alignment
                             0x02,               // Length
-                            )
-                        IRQNoFlags ()
-                            {8}
-                    })
-                }
-
-                Device (SPKR)
-                {
-                    Name (_HID, EisaId ("PNP0800"))
-                    Name (_CRS, ResourceTemplate ()
-                    {
-                        IO (Decode16,
-                            0x0061,             // Range Minimum
-                            0x0061,             // Range Maximum
-                            0x00,               // Alignment
-                            0x01,               // Length
                             )
                     })
                 }
@@ -5550,7 +5530,7 @@ DefinitionBlock ("dsdt.aml", "DSDT", 2, "ALASKA", "A M I", 0x00000A06)
                     }
                 }
 
-                Device (COPR)
+                Device (MATH)
                 {
                     Name (_HID, EisaId ("PNP0C04"))
                     Name (_CRS, ResourceTemplate ()
@@ -5675,7 +5655,7 @@ DefinitionBlock ("dsdt.aml", "DSDT", 2, "ALASKA", "A M I", 0x00000A06)
                 }
             }
 
-            Device (SAT0)
+            Device (SATA)
             {
                 Name (_ADR, 0x001F0002)
                 Name (^NATA, Package (0x01)
@@ -5824,7 +5804,7 @@ DefinitionBlock ("dsdt.aml", "DSDT", 2, "ALASKA", "A M I", 0x00000A06)
                 Name (GSUE, Zero)
                 Name (GSUT, Zero)
                 Name (GSCR, Zero)
-                Device (CHN0)
+                Device (PRT0)
                 {
                     Name (_ADR, Zero)
                     Method (_GTM, 0, NotSerialized)
@@ -5955,7 +5935,7 @@ DefinitionBlock ("dsdt.aml", "DSDT", 2, "ALASKA", "A M I", 0x00000A06)
                     }
                 }
 
-                Device (CHN1)
+                Device (PRT1)
                 {
                     Name (_ADR, One)
                     Method (_GTM, 0, NotSerialized)
@@ -6428,752 +6408,7 @@ DefinitionBlock ("dsdt.aml", "DSDT", 2, "ALASKA", "A M I", 0x00000A06)
                 }
             }
 
-            Device (SAT1)
-            {
-                Name (_ADR, 0x001F0005)
-                Name (REGF, One)
-                Method (_REG, 2, NotSerialized)
-                {
-                    If (LEqual (Arg0, 0x02))
-                    {
-                        Store (Arg1, REGF)
-                    }
-                }
-
-                Name (TIM0, Package (0x08)
-                {
-                    Package (0x04)
-                    {
-                        0x78, 
-                        0xB4, 
-                        0xF0, 
-                        0x0384
-                    }, 
-
-                    Package (0x04)
-                    {
-                        0x23, 
-                        0x21, 
-                        0x10, 
-                        Zero
-                    }, 
-
-                    Package (0x04)
-                    {
-                        0x0B, 
-                        0x09, 
-                        0x04, 
-                        Zero
-                    }, 
-
-                    Package (0x06)
-                    {
-                        0x78, 
-                        0x5A, 
-                        0x3C, 
-                        0x28, 
-                        0x1E, 
-                        0x14
-                    }, 
-
-                    Package (0x06)
-                    {
-                        Zero, 
-                        One, 
-                        0x02, 
-                        One, 
-                        0x02, 
-                        One
-                    }, 
-
-                    Package (0x06)
-                    {
-                        Zero, 
-                        Zero, 
-                        Zero, 
-                        One, 
-                        One, 
-                        One
-                    }, 
-
-                    Package (0x04)
-                    {
-                        0x04, 
-                        0x03, 
-                        0x02, 
-                        Zero
-                    }, 
-
-                    Package (0x04)
-                    {
-                        0x02, 
-                        One, 
-                        Zero, 
-                        Zero
-                    }
-                })
-                Name (TMD0, Buffer (0x14) {})
-                CreateDWordField (TMD0, Zero, PIO0)
-                CreateDWordField (TMD0, 0x04, DMA0)
-                CreateDWordField (TMD0, 0x08, PIO1)
-                CreateDWordField (TMD0, 0x0C, DMA1)
-                CreateDWordField (TMD0, 0x10, CHNF)
-                OperationRegion (CFG2, PCI_Config, 0x40, 0x20)
-                Field (CFG2, DWordAcc, NoLock, Preserve)
-                {
-                    PMPT,   4, 
-                    PSPT,   4, 
-                    PMRI,   6, 
-                    Offset (0x02), 
-                    SMPT,   4, 
-                    SSPT,   4, 
-                    SMRI,   6, 
-                    Offset (0x04), 
-                    PSRI,   4, 
-                    SSRI,   4, 
-                    Offset (0x08), 
-                    PM3E,   1, 
-                    PS3E,   1, 
-                    SM3E,   1, 
-                    SS3E,   1, 
-                    Offset (0x0A), 
-                    PMUT,   2, 
-                        ,   2, 
-                    PSUT,   2, 
-                    Offset (0x0B), 
-                    SMUT,   2, 
-                        ,   2, 
-                    SSUT,   2, 
-                    Offset (0x0C), 
-                    Offset (0x14), 
-                    PM6E,   1, 
-                    PS6E,   1, 
-                    SM6E,   1, 
-                    SS6E,   1, 
-                    PMCR,   1, 
-                    PSCR,   1, 
-                    SMCR,   1, 
-                    SSCR,   1, 
-                        ,   4, 
-                    PMAE,   1, 
-                    PSAE,   1, 
-                    SMAE,   1, 
-                    SSAE,   1
-                }
-
-                Name (GMPT, Zero)
-                Name (GMUE, Zero)
-                Name (GMUT, Zero)
-                Name (GMCR, Zero)
-                Name (GSPT, Zero)
-                Name (GSUE, Zero)
-                Name (GSUT, Zero)
-                Name (GSCR, Zero)
-                Device (CHN0)
-                {
-                    Name (_ADR, Zero)
-                    Method (_GTM, 0, NotSerialized)
-                    {
-                        ShiftLeft (PSCR, One, Local1)
-                        Or (PMCR, Local1, Local0)
-                        ShiftLeft (PMAE, 0x02, Local3)
-                        ShiftLeft (PM6E, One, Local4)
-                        Or (Local3, Local4, Local3)
-                        Or (PM3E, Local3, Local1)
-                        ShiftLeft (PMPT, 0x04, Local3)
-                        Or (Local1, Local3, Local1)
-                        ShiftLeft (PSAE, 0x02, Local3)
-                        ShiftLeft (PS6E, One, Local4)
-                        Or (Local3, Local4, Local3)
-                        Or (PS3E, Local3, Local2)
-                        ShiftLeft (PSPT, 0x04, Local3)
-                        Or (Local2, Local3, Local2)
-                        Return (GTM (PMRI, Local1, PMUT, PSRI, Local2, PSUT, Local0))
-                    }
-
-                    Method (_STM, 3, NotSerialized)
-                    {
-                        Store (Arg0, Debug)
-                        Store (Arg0, TMD0)
-                        ShiftLeft (PMAE, 0x02, Local3)
-                        ShiftLeft (PM6E, One, Local4)
-                        Or (Local3, Local4, Local3)
-                        Or (PM3E, Local3, Local0)
-                        ShiftLeft (PMPT, 0x04, Local3)
-                        Or (Local0, Local3, Local0)
-                        ShiftLeft (PSAE, 0x02, Local3)
-                        ShiftLeft (PS6E, One, Local4)
-                        Or (Local3, Local4, Local3)
-                        Or (PS3E, Local3, Local1)
-                        ShiftLeft (PSPT, 0x04, Local3)
-                        Or (Local1, Local3, Local1)
-                        Store (PMRI, GMPT)
-                        Store (Local0, GMUE)
-                        Store (PMUT, GMUT)
-                        Store (PMCR, GMCR)
-                        Store (PSRI, GSPT)
-                        Store (Local1, GSUE)
-                        Store (PSUT, GSUT)
-                        Store (PSCR, GSCR)
-                        STM ()
-                        Store (GMPT, PMRI)
-                        Store (GMUE, Local0)
-                        Store (GMUT, PMUT)
-                        Store (GMCR, PMCR)
-                        Store (GSUE, Local1)
-                        Store (GSUT, PSUT)
-                        Store (GSCR, PSCR)
-                        If (And (Local0, One))
-                        {
-                            Store (One, PM3E)
-                        }
-                        Else
-                        {
-                            Store (Zero, PM3E)
-                        }
-
-                        If (And (Local0, 0x02))
-                        {
-                            Store (One, PM6E)
-                        }
-                        Else
-                        {
-                            Store (Zero, PM6E)
-                        }
-
-                        If (And (Local0, 0x04))
-                        {
-                            Store (One, PMAE)
-                        }
-                        Else
-                        {
-                            Store (Zero, PMAE)
-                        }
-
-                        If (And (Local1, One))
-                        {
-                            Store (One, PS3E)
-                        }
-                        Else
-                        {
-                            Store (Zero, PS3E)
-                        }
-
-                        If (And (Local1, 0x02))
-                        {
-                            Store (One, PS6E)
-                        }
-                        Else
-                        {
-                            Store (Zero, PS6E)
-                        }
-
-                        If (And (Local1, 0x04))
-                        {
-                            Store (One, PSAE)
-                        }
-                        Else
-                        {
-                            Store (Zero, PSAE)
-                        }
-
-                        Store (GTF (Zero, Arg1), ATA0)
-                        Store (GTF (One, Arg2), ATA1)
-                    }
-
-                    Device (DRV0)
-                    {
-                        Name (_ADR, Zero)
-                        Method (_GTF, 0, NotSerialized)
-                        {
-                            Return (RATA (ATA0))
-                        }
-                    }
-
-                    Device (DRV1)
-                    {
-                        Name (_ADR, One)
-                        Method (_GTF, 0, NotSerialized)
-                        {
-                            Return (RATA (ATA1))
-                        }
-                    }
-                }
-
-                Device (CHN1)
-                {
-                    Name (_ADR, One)
-                    Method (_GTM, 0, NotSerialized)
-                    {
-                        ShiftLeft (SSCR, One, Local1)
-                        Or (SMCR, Local1, Local0)
-                        ShiftLeft (SMAE, 0x02, Local3)
-                        ShiftLeft (SM6E, One, Local4)
-                        Or (Local3, Local4, Local3)
-                        Or (SM3E, Local3, Local1)
-                        ShiftLeft (SMPT, 0x04, Local3)
-                        Or (Local1, Local3, Local1)
-                        ShiftLeft (SSAE, 0x02, Local3)
-                        ShiftLeft (SS6E, One, Local4)
-                        Or (Local3, Local4, Local3)
-                        Or (SS3E, Local3, Local2)
-                        ShiftLeft (SSPT, 0x04, Local3)
-                        Or (Local2, Local3, Local2)
-                        Return (GTM (SMRI, Local1, SMUT, SSRI, Local2, SSUT, Local0))
-                    }
-
-                    Method (_STM, 3, NotSerialized)
-                    {
-                        Store (Arg0, Debug)
-                        Store (Arg0, TMD0)
-                        ShiftLeft (SMAE, 0x02, Local3)
-                        ShiftLeft (SM6E, One, Local4)
-                        Or (Local3, Local4, Local3)
-                        Or (SM3E, Local3, Local0)
-                        ShiftLeft (SMPT, 0x04, Local3)
-                        Or (Local0, Local3, Local0)
-                        ShiftLeft (SSAE, 0x02, Local3)
-                        ShiftLeft (SS6E, One, Local4)
-                        Or (Local3, Local4, Local3)
-                        Or (SS3E, Local3, Local1)
-                        ShiftLeft (SSPT, 0x04, Local3)
-                        Or (Local1, Local3, Local1)
-                        Store (SMRI, GMPT)
-                        Store (Local0, GMUE)
-                        Store (SMUT, GMUT)
-                        Store (SMCR, GMCR)
-                        Store (SSRI, GSPT)
-                        Store (Local1, GSUE)
-                        Store (SSUT, GSUT)
-                        Store (SSCR, GSCR)
-                        STM ()
-                        Store (GMPT, SMRI)
-                        Store (GMUE, Local0)
-                        Store (GMUT, SMUT)
-                        Store (GMCR, SMCR)
-                        Store (GSUE, Local1)
-                        Store (GSUT, SSUT)
-                        Store (GSCR, SSCR)
-                        If (And (Local0, One))
-                        {
-                            Store (One, SM3E)
-                        }
-                        Else
-                        {
-                            Store (Zero, SM3E)
-                        }
-
-                        If (And (Local0, 0x02))
-                        {
-                            Store (One, SM6E)
-                        }
-                        Else
-                        {
-                            Store (Zero, SM6E)
-                        }
-
-                        If (And (Local0, 0x04))
-                        {
-                            Store (One, SMAE)
-                        }
-                        Else
-                        {
-                            Store (Zero, SMAE)
-                        }
-
-                        If (And (Local1, One))
-                        {
-                            Store (One, SS3E)
-                        }
-                        Else
-                        {
-                            Store (Zero, SS3E)
-                        }
-
-                        If (And (Local1, 0x02))
-                        {
-                            Store (One, SS6E)
-                        }
-                        Else
-                        {
-                            Store (Zero, SS6E)
-                        }
-
-                        If (And (Local1, 0x04))
-                        {
-                            Store (One, SSAE)
-                        }
-                        Else
-                        {
-                            Store (Zero, SSAE)
-                        }
-
-                        Store (GTF (Zero, Arg1), ATA2)
-                        Store (GTF (One, Arg2), ATA3)
-                    }
-
-                    Device (DRV0)
-                    {
-                        Name (_ADR, Zero)
-                        Method (_GTF, 0, NotSerialized)
-                        {
-                            Return (RATA (ATA2))
-                        }
-                    }
-
-                    Device (DRV1)
-                    {
-                        Name (_ADR, One)
-                        Method (_GTF, 0, NotSerialized)
-                        {
-                            Return (RATA (ATA3))
-                        }
-                    }
-                }
-
-                Method (GTM, 7, Serialized)
-                {
-                    Store (Ones, PIO0)
-                    Store (Ones, PIO1)
-                    Store (Ones, DMA0)
-                    Store (Ones, DMA1)
-                    Store (0x10, CHNF)
-                    If (REGF) {}
-                    Else
-                    {
-                        Return (TMD0)
-                    }
-
-                    If (And (Arg1, 0x20))
-                    {
-                        Or (CHNF, 0x02, CHNF)
-                    }
-
-                    Store (Match (DerefOf (Index (TIM0, One)), MEQ, Arg0, MTR, 
-                        Zero, Zero), Local6)
-                    Store (DerefOf (Index (DerefOf (Index (TIM0, Zero)), Local6)), 
-                        Local7)
-                    Store (Local7, DMA0)
-                    Store (Local7, PIO0)
-                    If (And (Arg4, 0x20))
-                    {
-                        Or (CHNF, 0x08, CHNF)
-                    }
-
-                    Store (Match (DerefOf (Index (TIM0, 0x02)), MEQ, Arg3, MTR, 
-                        Zero, Zero), Local6)
-                    Store (DerefOf (Index (DerefOf (Index (TIM0, Zero)), Local6)), 
-                        Local7)
-                    Store (Local7, DMA1)
-                    Store (Local7, PIO1)
-                    If (And (Arg1, 0x07))
-                    {
-                        Store (Arg2, Local5)
-                        If (And (Arg1, 0x02))
-                        {
-                            Add (Local5, 0x02, Local5)
-                        }
-
-                        If (And (Arg1, 0x04))
-                        {
-                            Add (Local5, 0x04, Local5)
-                        }
-
-                        Store (DerefOf (Index (DerefOf (Index (TIM0, 0x03)), Local5)), 
-                            DMA0)
-                        Or (CHNF, One, CHNF)
-                    }
-
-                    If (And (Arg4, 0x07))
-                    {
-                        Store (Arg5, Local5)
-                        If (And (Arg4, 0x02))
-                        {
-                            Add (Local5, 0x02, Local5)
-                        }
-
-                        If (And (Arg4, 0x04))
-                        {
-                            Add (Local5, 0x04, Local5)
-                        }
-
-                        Store (DerefOf (Index (DerefOf (Index (TIM0, 0x03)), Local5)), 
-                            DMA1)
-                        Or (CHNF, 0x04, CHNF)
-                    }
-
-                    Store (TMD0, Debug)
-                    Return (TMD0)
-                }
-
-                Method (STM, 0, Serialized)
-                {
-                    If (REGF)
-                    {
-                        Store (Zero, GMUE)
-                        Store (Zero, GMUT)
-                        Store (Zero, GSUE)
-                        Store (Zero, GSUT)
-                        If (And (CHNF, One))
-                        {
-                            Store (Match (DerefOf (Index (TIM0, 0x03)), MLE, DMA0, MTR, 
-                                Zero, Zero), Local0)
-                            If (LGreater (Local0, 0x05))
-                            {
-                                Store (0x05, Local0)
-                            }
-
-                            Store (DerefOf (Index (DerefOf (Index (TIM0, 0x04)), Local0)), 
-                                GMUT)
-                            Or (GMUE, One, GMUE)
-                            If (LGreater (Local0, 0x02))
-                            {
-                                Or (GMUE, 0x02, GMUE)
-                            }
-
-                            If (LGreater (Local0, 0x04))
-                            {
-                                And (GMUE, 0xFD, GMUE)
-                                Or (GMUE, 0x04, GMUE)
-                            }
-                        }
-                        Else
-                        {
-                            If (Or (LEqual (PIO0, Ones), LEqual (PIO0, Zero)))
-                            {
-                                If (And (LLess (DMA0, Ones), LGreater (DMA0, Zero)))
-                                {
-                                    Store (DMA0, PIO0)
-                                    Or (GMUE, 0x80, GMUE)
-                                }
-                            }
-                        }
-
-                        If (And (CHNF, 0x04))
-                        {
-                            Store (Match (DerefOf (Index (TIM0, 0x03)), MLE, DMA1, MTR, 
-                                Zero, Zero), Local0)
-                            If (LGreater (Local0, 0x05))
-                            {
-                                Store (0x05, Local0)
-                            }
-
-                            Store (DerefOf (Index (DerefOf (Index (TIM0, 0x04)), Local0)), 
-                                GSUT)
-                            Or (GSUE, One, GSUE)
-                            If (LGreater (Local0, 0x02))
-                            {
-                                Or (GSUE, 0x02, GSUE)
-                            }
-
-                            If (LGreater (Local0, 0x04))
-                            {
-                                And (GSUE, 0xFD, GSUE)
-                                Or (GSUE, 0x04, GSUE)
-                            }
-                        }
-                        Else
-                        {
-                            If (Or (LEqual (PIO1, Ones), LEqual (PIO1, Zero)))
-                            {
-                                If (And (LLess (DMA1, Ones), LGreater (DMA1, Zero)))
-                                {
-                                    Store (DMA1, PIO1)
-                                    Or (GSUE, 0x80, GSUE)
-                                }
-                            }
-                        }
-
-                        If (And (CHNF, 0x02))
-                        {
-                            Or (GMUE, 0x20, GMUE)
-                        }
-
-                        If (And (CHNF, 0x08))
-                        {
-                            Or (GSUE, 0x20, GSUE)
-                        }
-
-                        And (Match (DerefOf (Index (TIM0, Zero)), MGE, PIO0, MTR, 
-                            Zero, Zero), 0x07, Local0)
-                        Store (DerefOf (Index (DerefOf (Index (TIM0, One)), Local0)), 
-                            Local1)
-                        Store (Local1, GMPT)
-                        If (LLess (Local0, 0x03))
-                        {
-                            Or (GMUE, 0x50, GMUE)
-                        }
-
-                        And (Match (DerefOf (Index (TIM0, Zero)), MGE, PIO1, MTR, 
-                            Zero, Zero), 0x07, Local0)
-                        Store (DerefOf (Index (DerefOf (Index (TIM0, 0x02)), Local0)), 
-                            Local1)
-                        Store (Local1, GSPT)
-                        If (LLess (Local0, 0x03))
-                        {
-                            Or (GSUE, 0x50, GSUE)
-                        }
-                    }
-                }
-
-                Name (AT01, Buffer (0x07)
-                {
-                     0x03, 0x00, 0x00, 0x00, 0x00, 0x00, 0xEF
-                })
-                Name (AT02, Buffer (0x07)
-                {
-                     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x90
-                })
-                Name (AT03, Buffer (0x07)
-                {
-                     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xC6
-                })
-                Name (AT04, Buffer (0x07)
-                {
-                     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x91
-                })
-                Name (ATA0, Buffer (0x1D) {})
-                Name (ATA1, Buffer (0x1D) {})
-                Name (ATA2, Buffer (0x1D) {})
-                Name (ATA3, Buffer (0x1D) {})
-                Name (ATAB, Buffer (0x1D) {})
-                CreateByteField (ATAB, Zero, CMDC)
-                Method (GTFB, 3, Serialized)
-                {
-                    Multiply (CMDC, 0x38, Local0)
-                    Add (Local0, 0x08, Local1)
-                    CreateField (ATAB, Local1, 0x38, CMDX)
-                    Multiply (CMDC, 0x07, Local0)
-                    CreateByteField (ATAB, Add (Local0, 0x02), A001)
-                    CreateByteField (ATAB, Add (Local0, 0x06), A005)
-                    Store (Arg0, CMDX)
-                    Store (Arg1, A001)
-                    Store (Arg2, A005)
-                    Increment (CMDC)
-                }
-
-                Method (GTF, 2, Serialized)
-                {
-                    Store (Arg1, Debug)
-                    Store (Zero, CMDC)
-                    Name (ID49, 0x0C00)
-                    Name (ID59, Zero)
-                    Name (ID53, 0x04)
-                    Name (ID63, 0x0F00)
-                    Name (ID88, 0x0F00)
-                    Name (IRDY, One)
-                    Name (PIOT, Zero)
-                    Name (DMAT, Zero)
-                    If (LEqual (SizeOf (Arg1), 0x0200))
-                    {
-                        CreateWordField (Arg1, 0x62, IW49)
-                        Store (IW49, ID49)
-                        CreateWordField (Arg1, 0x6A, IW53)
-                        Store (IW53, ID53)
-                        CreateWordField (Arg1, 0x7E, IW63)
-                        Store (IW63, ID63)
-                        CreateWordField (Arg1, 0x76, IW59)
-                        Store (IW59, ID59)
-                        CreateWordField (Arg1, 0xB0, IW88)
-                        Store (IW88, ID88)
-                    }
-
-                    Store (0xA0, Local7)
-                    If (Arg0)
-                    {
-                        Store (0xB0, Local7)
-                        And (CHNF, 0x08, IRDY)
-                        If (And (CHNF, 0x10))
-                        {
-                            Store (PIO1, PIOT)
-                        }
-                        Else
-                        {
-                            Store (PIO0, PIOT)
-                        }
-
-                        If (And (CHNF, 0x04))
-                        {
-                            If (And (CHNF, 0x10))
-                            {
-                                Store (DMA1, DMAT)
-                            }
-                            Else
-                            {
-                                Store (DMA0, DMAT)
-                            }
-                        }
-                    }
-                    Else
-                    {
-                        And (CHNF, 0x02, IRDY)
-                        Store (PIO0, PIOT)
-                        If (And (CHNF, One))
-                        {
-                            Store (DMA0, DMAT)
-                        }
-                    }
-
-                    If (LAnd (LAnd (And (ID53, 0x04), And (ID88, 0xFF00
-                        )), DMAT))
-                    {
-                        Store (Match (DerefOf (Index (TIM0, 0x03)), MLE, DMAT, MTR, 
-                            Zero, Zero), Local1)
-                        If (LGreater (Local1, 0x05))
-                        {
-                            Store (0x05, Local1)
-                        }
-
-                        GTFB (AT01, Or (0x40, Local1), Local7)
-                    }
-                    Else
-                    {
-                        If (LAnd (And (ID63, 0xFF00), PIOT))
-                        {
-                            And (Match (DerefOf (Index (TIM0, Zero)), MGE, PIOT, MTR, 
-                                Zero, Zero), 0x03, Local0)
-                            Or (0x20, DerefOf (Index (DerefOf (Index (TIM0, 0x07)), Local0
-                                )), Local1)
-                            GTFB (AT01, Local1, Local7)
-                        }
-                    }
-
-                    If (IRDY)
-                    {
-                        And (Match (DerefOf (Index (TIM0, Zero)), MGE, PIOT, MTR, 
-                            Zero, Zero), 0x07, Local0)
-                        Or (0x08, DerefOf (Index (DerefOf (Index (TIM0, 0x06)), Local0
-                            )), Local1)
-                        GTFB (AT01, Local1, Local7)
-                    }
-                    Else
-                    {
-                        If (And (ID49, 0x0400))
-                        {
-                            GTFB (AT01, One, Local7)
-                        }
-                    }
-
-                    If (LAnd (And (ID59, 0x0100), And (ID59, 0xFF)))
-                    {
-                        GTFB (AT03, And (ID59, 0xFF), Local7)
-                    }
-
-                    Store (ATAB, Debug)
-                    Return (ATAB)
-                }
-
-                Method (RATA, 1, NotSerialized)
-                {
-                    CreateByteField (Arg0, Zero, CMDN)
-                    Multiply (CMDN, 0x38, Local0)
-                    CreateField (Arg0, 0x08, Local0, RETB)
-                    Store (RETB, Debug)
-                    Return (Concatenate (RETB, FZTF))
-                }
-            }
-
-            Device (SMB)
+            Device (SBUS)
             {
                 Name (_ADR, 0x001F0003)
                 OperationRegion (SMIO, SystemIO, SMBS, SMBL)
@@ -7208,17 +6443,38 @@ DefinitionBlock ("dsdt.aml", "DSDT", 2, "ALASKA", "A M I", 0x00000A06)
                 {
                     Method (_L07, 0, NotSerialized)
                     {
-                        Store (0x20, \_SB.PCI0.SMB.HSTS)
+                        Store (0x20, \_SB.PCI0.SBUS.HSTS)
                     }
 
                     Method (_L1B, 0, NotSerialized)
                     {
-                        Store (0x20, \_SB.PCI0.SMB.HSTS)
+                        Store (0x20, \_SB.PCI0.SBUS.HSTS)
+                    }
+                }
+
+                Device (BUS0)
+                {
+                    Name (_CID, "smbus")
+                    Name (_ADR, Zero)
+                    Device (DVL0)
+                    {
+                        Name (_ADR, 0x57)
+                        Name (_CID, "diagsvault")
+                        Method (_DSM, 4, NotSerialized)
+                        {
+                            Store (Package (0x02)
+                                {
+                                    "address", 
+                                    0x57
+                                }, Local0)
+                            DTGP (Arg0, Arg1, Arg2, Arg3, RefOf (Local0))
+                            Return (Local0)
+                        }
                     }
                 }
             }
 
-            Device (EUSB)
+            Device (EHC1)
             {
                 Name (_ADR, 0x001D0000)
                 Name (_S4D, 0x02)
@@ -7238,10 +6494,24 @@ DefinitionBlock ("dsdt.aml", "DSDT", 2, "ALASKA", "A M I", 0x00000A06)
                             Zero, 
                             Zero
                         })
-                        Name (_PLD, Buffer (0x10)
+                        Name (_PLD, Package (0x10)
                         {
-                            /* 0000 */   0x81, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-                            /* 0008 */   0x30, 0x1C, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+                            0x81, 
+                            Zero, 
+                            Zero, 
+                            Zero, 
+                            Zero, 
+                            Zero, 
+                            Zero, 
+                            Zero, 
+                            0x30, 
+                            0x1C, 
+                            Zero, 
+                            Zero, 
+                            Zero, 
+                            Zero, 
+                            Zero, 
+                            Zero
                         })
                         Device (PR30)
                         {
@@ -7253,10 +6523,24 @@ DefinitionBlock ("dsdt.aml", "DSDT", 2, "ALASKA", "A M I", 0x00000A06)
                                 Zero, 
                                 Zero
                             })
-                            Name (_PLD, Buffer (0x10)
+                            Name (_PLD, Package (0x10)
                             {
-                                /* 0000 */   0x81, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-                                /* 0008 */   0xE1, 0x1C, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+                                0x81, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                0xE1, 
+                                0x1C, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero
                             })
                         }
 
@@ -7270,10 +6554,24 @@ DefinitionBlock ("dsdt.aml", "DSDT", 2, "ALASKA", "A M I", 0x00000A06)
                                 Zero, 
                                 Zero
                             })
-                            Name (_PLD, Buffer (0x10)
+                            Name (_PLD, Package (0x10)
                             {
-                                /* 0000 */   0x81, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-                                /* 0008 */   0xE1, 0x1D, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+                                0x81, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                0xE1, 
+                                0x1D, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero
                             })
                         }
 
@@ -7287,10 +6585,24 @@ DefinitionBlock ("dsdt.aml", "DSDT", 2, "ALASKA", "A M I", 0x00000A06)
                                 Zero, 
                                 Zero
                             })
-                            Name (_PLD, Buffer (0x10)
+                            Name (_PLD, Package (0x10)
                             {
-                                /* 0000 */   0x81, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-                                /* 0008 */   0xE1, 0x1D, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+                                0x81, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                0xE1, 
+                                0x1D, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero
                             })
                         }
 
@@ -7304,10 +6616,24 @@ DefinitionBlock ("dsdt.aml", "DSDT", 2, "ALASKA", "A M I", 0x00000A06)
                                 Zero, 
                                 Zero
                             })
-                            Name (_PLD, Buffer (0x10)
+                            Name (_PLD, Package (0x10)
                             {
-                                /* 0000 */   0x81, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-                                /* 0008 */   0xE1, 0x1E, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+                                0x81, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                0xE1, 
+                                0x1E, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero
                             })
                         }
 
@@ -7321,10 +6647,24 @@ DefinitionBlock ("dsdt.aml", "DSDT", 2, "ALASKA", "A M I", 0x00000A06)
                                 Zero, 
                                 Zero
                             })
-                            Name (_PLD, Buffer (0x10)
+                            Name (_PLD, Package (0x10)
                             {
-                                /* 0000 */   0x81, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-                                /* 0008 */   0xB1, 0x1E, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+                                0x81, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                0xB1, 
+                                0x1E, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero
                             })
                         }
 
@@ -7338,10 +6678,24 @@ DefinitionBlock ("dsdt.aml", "DSDT", 2, "ALASKA", "A M I", 0x00000A06)
                                 Zero, 
                                 Zero
                             })
-                            Name (_PLD, Buffer (0x10)
+                            Name (_PLD, Package (0x10)
                             {
-                                /* 0000 */   0x81, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-                                /* 0008 */   0xB1, 0x1E, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+                                0x81, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                0xB1, 
+                                0x1E, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero
                             })
                         }
 
@@ -7355,10 +6709,24 @@ DefinitionBlock ("dsdt.aml", "DSDT", 2, "ALASKA", "A M I", 0x00000A06)
                                 Zero, 
                                 Zero
                             })
-                            Name (_PLD, Buffer (0x10)
+                            Name (_PLD, Package (0x10)
                             {
-                                /* 0000 */   0x81, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-                                /* 0008 */   0xB1, 0x1E, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+                                0x81, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                0xB1, 
+                                0x1E, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero
                             })
                         }
 
@@ -7372,10 +6740,24 @@ DefinitionBlock ("dsdt.aml", "DSDT", 2, "ALASKA", "A M I", 0x00000A06)
                                 Zero, 
                                 Zero
                             })
-                            Name (_PLD, Buffer (0x10)
+                            Name (_PLD, Package (0x10)
                             {
-                                /* 0000 */   0x81, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-                                /* 0008 */   0xB1, 0x1E, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+                                0x81, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                0xB1, 
+                                0x1E, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero
                             })
                         }
                     }
@@ -7385,9 +6767,34 @@ DefinitionBlock ("dsdt.aml", "DSDT", 2, "ALASKA", "A M I", 0x00000A06)
                 {
                     Return (GPRW (0x0D, 0x04))
                 }
+
+                Method (_DSM, 4, NotSerialized)
+                {
+                    Store (Package (0x0D)
+                        {
+                            "AAPL,current-available", 
+                            0x0834, 
+                            "AAPL,current-extra", 
+                            0x0898, 
+                            "AAPL,current-extra-in-sleep", 
+                            0x0640, 
+                            "AAPL,device-internal", 
+                            0x02, 
+                            "AAPL,max-port-current-in-sleep", 
+                            0x0834, 
+                            "AAPL,clock-id", 
+                            0x01, 
+                            Buffer (One)
+                            {
+                                 0x00
+                            }
+                        }, Local0)
+                    DTGP (Arg0, Arg1, Arg2, Arg3, RefOf (Local0))
+                    Return (Local0)
+                }
             }
 
-            Device (USBE)
+            Device (EHC2)
             {
                 Name (_ADR, 0x001A0000)
                 Name (_S4D, 0x02)
@@ -7407,10 +6814,24 @@ DefinitionBlock ("dsdt.aml", "DSDT", 2, "ALASKA", "A M I", 0x00000A06)
                             Zero, 
                             Zero
                         })
-                        Name (_PLD, Buffer (0x10)
+                        Name (_PLD, Package (0x10)
                         {
-                            /* 0000 */   0x81, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-                            /* 0008 */   0x30, 0x1C, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+                            0x81, 
+                            Zero, 
+                            Zero, 
+                            Zero, 
+                            Zero, 
+                            Zero, 
+                            Zero, 
+                            Zero, 
+                            0x30, 
+                            0x1C, 
+                            Zero, 
+                            Zero, 
+                            Zero, 
+                            Zero, 
+                            Zero, 
+                            Zero
                         })
                         Device (PR30)
                         {
@@ -7422,10 +6843,24 @@ DefinitionBlock ("dsdt.aml", "DSDT", 2, "ALASKA", "A M I", 0x00000A06)
                                 Zero, 
                                 Zero
                             })
-                            Name (_PLD, Buffer (0x10)
+                            Name (_PLD, Package (0x10)
                             {
-                                /* 0000 */   0x81, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-                                /* 0008 */   0xE1, 0x1C, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+                                0x81, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                0xE1, 
+                                0x1C, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero
                             })
                         }
 
@@ -7439,10 +6874,24 @@ DefinitionBlock ("dsdt.aml", "DSDT", 2, "ALASKA", "A M I", 0x00000A06)
                                 Zero, 
                                 Zero
                             })
-                            Name (_PLD, Buffer (0x10)
+                            Name (_PLD, Package (0x10)
                             {
-                                /* 0000 */   0x81, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-                                /* 0008 */   0xE1, 0x1D, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+                                0x81, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                0xE1, 
+                                0x1D, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero
                             })
                         }
 
@@ -7456,10 +6905,24 @@ DefinitionBlock ("dsdt.aml", "DSDT", 2, "ALASKA", "A M I", 0x00000A06)
                                 Zero, 
                                 Zero
                             })
-                            Name (_PLD, Buffer (0x10)
+                            Name (_PLD, Package (0x10)
                             {
-                                /* 0000 */   0x81, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-                                /* 0008 */   0xE1, 0x1D, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+                                0x81, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                0xE1, 
+                                0x1D, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero
                             })
                         }
 
@@ -7473,10 +6936,24 @@ DefinitionBlock ("dsdt.aml", "DSDT", 2, "ALASKA", "A M I", 0x00000A06)
                                 Zero, 
                                 Zero
                             })
-                            Name (_PLD, Buffer (0x10)
+                            Name (_PLD, Package (0x10)
                             {
-                                /* 0000 */   0x81, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-                                /* 0008 */   0xE1, 0x1E, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+                                0x81, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                0xE1, 
+                                0x1E, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero
                             })
                         }
 
@@ -7490,10 +6967,24 @@ DefinitionBlock ("dsdt.aml", "DSDT", 2, "ALASKA", "A M I", 0x00000A06)
                                 Zero, 
                                 Zero
                             })
-                            Name (_PLD, Buffer (0x10)
+                            Name (_PLD, Package (0x10)
                             {
-                                /* 0000 */   0x81, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-                                /* 0008 */   0xB1, 0x1E, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+                                0x81, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                0xB1, 
+                                0x1E, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero
                             })
                         }
 
@@ -7507,11 +6998,29 @@ DefinitionBlock ("dsdt.aml", "DSDT", 2, "ALASKA", "A M I", 0x00000A06)
                                 Zero, 
                                 Zero
                             })
-                            Name (_PLD, Buffer (0x10)
+                            Name (_PLD, Package (0x10)
                             {
-                                /* 0000 */   0x81, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-                                /* 0008 */   0xE1, 0x1E, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+                                0x81, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                0xE1, 
+                                0x1E, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero, 
+                                Zero
                             })
+                            Method (_RMV, 0, NotSerialized)
+                            {
+                                Return (Zero)
+                            }
                         }
                     }
                 }
@@ -7520,9 +7029,34 @@ DefinitionBlock ("dsdt.aml", "DSDT", 2, "ALASKA", "A M I", 0x00000A06)
                 {
                     Return (GPRW (0x0D, 0x04))
                 }
+
+                Method (_DSM, 4, NotSerialized)
+                {
+                    Store (Package (0x0D)
+                        {
+                            "AAPL,current-available", 
+                            0x0834, 
+                            "AAPL,current-extra", 
+                            0x0898, 
+                            "AAPL,current-extra-in-sleep", 
+                            0x0640, 
+                            "AAPL,device-internal", 
+                            0x02, 
+                            "AAPL,max-port-current-in-sleep", 
+                            0x0834, 
+                            "AAPL,clock-id", 
+                            0x02, 
+                            Buffer (One)
+                            {
+                                 0x00
+                            }
+                        }, Local0)
+                    DTGP (Arg0, Arg1, Arg2, Arg3, RefOf (Local0))
+                    Return (Local0)
+                }
             }
 
-            Device (PEX0)
+            Device (RP01)
             {
                 Name (_ADR, 0x001C0000)
                 OperationRegion (PXRC, PCI_Config, Zero, 0x0100)
@@ -7577,7 +7111,7 @@ DefinitionBlock ("dsdt.aml", "DSDT", 2, "ALASKA", "A M I", 0x00000A06)
                 }
             }
 
-            Device (PEX1)
+            Device (RP02)
             {
                 Name (_ADR, 0x001C0001)
                 OperationRegion (PXRC, PCI_Config, Zero, 0x0100)
@@ -7632,7 +7166,7 @@ DefinitionBlock ("dsdt.aml", "DSDT", 2, "ALASKA", "A M I", 0x00000A06)
                 }
             }
 
-            Device (PEX2)
+            Device (RP03)
             {
                 Name (_ADR, 0x001C0002)
                 OperationRegion (PXRC, PCI_Config, Zero, 0x0100)
@@ -7687,7 +7221,7 @@ DefinitionBlock ("dsdt.aml", "DSDT", 2, "ALASKA", "A M I", 0x00000A06)
                 }
             }
 
-            Device (PEX3)
+            Device (RP04)
             {
                 Name (_ADR, 0x001C0003)
                 OperationRegion (PXRC, PCI_Config, Zero, 0x0100)
@@ -7742,7 +7276,7 @@ DefinitionBlock ("dsdt.aml", "DSDT", 2, "ALASKA", "A M I", 0x00000A06)
                 }
             }
 
-            Device (PEX4)
+            Device (RP05)
             {
                 Name (_ADR, 0x001C0004)
                 OperationRegion (PXRC, PCI_Config, Zero, 0x0100)
@@ -7797,7 +7331,7 @@ DefinitionBlock ("dsdt.aml", "DSDT", 2, "ALASKA", "A M I", 0x00000A06)
                 }
             }
 
-            Device (PEX5)
+            Device (RP06)
             {
                 Name (_ADR, 0x001C0005)
                 OperationRegion (PXRC, PCI_Config, Zero, 0x0100)
@@ -7852,7 +7386,7 @@ DefinitionBlock ("dsdt.aml", "DSDT", 2, "ALASKA", "A M I", 0x00000A06)
                 }
             }
 
-            Device (PEX6)
+            Device (RP07)
             {
                 Name (_ADR, 0x001C0006)
                 OperationRegion (PXRC, PCI_Config, Zero, 0x0100)
@@ -7907,7 +7441,7 @@ DefinitionBlock ("dsdt.aml", "DSDT", 2, "ALASKA", "A M I", 0x00000A06)
                 }
             }
 
-            Device (PEX7)
+            Device (RP08)
             {
                 Name (_ADR, 0x001C0007)
                 OperationRegion (PXRC, PCI_Config, Zero, 0x0100)
@@ -7978,6 +7512,55 @@ DefinitionBlock ("dsdt.aml", "DSDT", 2, "ALASKA", "A M I", 0x00000A06)
                     }
 
                     Return (PR01)
+                }
+
+                Device (GFX0)
+                {
+                    Name (_ADR, Zero)
+                    Name (_SUN, One)
+                    Method (_DSM, 4, NotSerialized)
+                    {
+                        Store (Package (0x06)
+                            {
+                                "@0,connector-type", 
+                                Buffer (0x04)
+                                {
+                                    0x00, 0x08, 0x00, 0x00
+                                }, 
+
+                                "@1,connector-type", 
+                                Buffer (0x04)
+                                {
+                                    0x00, 0x08, 0x00, 0x00
+                                }, 
+
+                                "hda-gfx", 
+                                Buffer (0x0A)
+                                {
+                                    "onboard-1"
+                                }
+                            }, Local0)
+                        DTGP (Arg0, Arg1, Arg2, Arg3, RefOf (Local0))
+                        Return (Local0)
+                    }
+                }
+
+                Device (HDAU)
+                {
+                    Name (_ADR, One)
+                    Method (_DSM, 4, NotSerialized)
+                    {
+                        Store (Package (0x02)
+                            {
+                                "hda-gfx", 
+                                Buffer (0x0A)
+                                {
+                                    "onboard-1"
+                                }
+                            }, Local0)
+                        DTGP (Arg0, Arg1, Arg2, Arg3, RefOf (Local0))
+                        Return (Local0)
+                    }
                 }
             }
 
@@ -8052,7 +7635,7 @@ DefinitionBlock ("dsdt.aml", "DSDT", 2, "ALASKA", "A M I", 0x00000A06)
         {
             Method (_L1D, 0, NotSerialized)
             {
-                \_SB.PCI0.SBRG.SIOH ()
+                \_SB.PCI0.LPCB.SIOH ()
                 Notify (\_SB.PWRB, 0x02)
             }
 
@@ -8064,22 +7647,22 @@ DefinitionBlock ("dsdt.aml", "DSDT", 2, "ALASKA", "A M I", 0x00000A06)
 
             Method (_L0D, 0, NotSerialized)
             {
-                Notify (\_SB.PCI0.EUSB, 0x02)
-                Notify (\_SB.PCI0.USBE, 0x02)
+                Notify (\_SB.PCI0.EHC1, 0x02)
+                Notify (\_SB.PCI0.EHC2, 0x02)
                 Notify (\_SB.PCI0.GBE, 0x02)
                 Notify (\_SB.PWRB, 0x02)
             }
 
             Method (_L09, 0, NotSerialized)
             {
-                Notify (\_SB.PCI0.PEX0, 0x02)
-                Notify (\_SB.PCI0.PEX1, 0x02)
-                Notify (\_SB.PCI0.PEX2, 0x02)
-                Notify (\_SB.PCI0.PEX3, 0x02)
-                Notify (\_SB.PCI0.PEX4, 0x02)
-                Notify (\_SB.PCI0.PEX5, 0x02)
-                Notify (\_SB.PCI0.PEX6, 0x02)
-                Notify (\_SB.PCI0.PEX7, 0x02)
+                Notify (\_SB.PCI0.RP01, 0x02)
+                Notify (\_SB.PCI0.RP02, 0x02)
+                Notify (\_SB.PCI0.RP03, 0x02)
+                Notify (\_SB.PCI0.RP04, 0x02)
+                Notify (\_SB.PCI0.RP05, 0x02)
+                Notify (\_SB.PCI0.RP06, 0x02)
+                Notify (\_SB.PCI0.RP07, 0x02)
+                Notify (\_SB.PCI0.RP08, 0x02)
                 Notify (\_SB.PCI0.P0P1, 0x02)
                 Notify (\_SB.PCI0.P0P2, 0x02)
                 Notify (\_SB.PCI0.P0P3, 0x02)
@@ -8100,8 +7683,8 @@ DefinitionBlock ("dsdt.aml", "DSDT", 2, "ALASKA", "A M I", 0x00000A06)
         }
     }
 
-    OperationRegion (_SB.PCI0.SBRG.PIX0, PCI_Config, 0x60, 0x0C)
-    Field (\_SB.PCI0.SBRG.PIX0, ByteAcc, NoLock, Preserve)
+    OperationRegion (_SB.PCI0.LPCB.PIX0, PCI_Config, 0x60, 0x0C)
+    Field (\_SB.PCI0.LPCB.PIX0, ByteAcc, NoLock, Preserve)
     {
         PIRA,   8, 
         PIRB,   8, 
@@ -8467,7 +8050,7 @@ DefinitionBlock ("dsdt.aml", "DSDT", 2, "ALASKA", "A M I", 0x00000A06)
         }
     }
 
-    Scope (_SB.PCI0.SBRG)
+    Scope (_SB.PCI0.LPCB)
     {
         Method (SIOH, 0, NotSerialized)
         {
@@ -8480,423 +8063,6 @@ DefinitionBlock ("dsdt.aml", "DSDT", 2, "ALASKA", "A M I", 0x00000A06)
             {
                 Notify (PS2M, 0x02)
             }
-        }
-    }
-
-    Scope (_PR)
-    {
-        OperationRegion (SSDT, SystemMemory, 0xBF614818, 0x079C)
-        OperationRegion (CSDT, SystemMemory, 0xBF616E18, 0x01A4)
-        Name (NCST, 0x02)
-        Name (NPSS, 0x0B)
-        Name (HNDL, 0x80000000)
-        Name (CHDL, 0x80000000)
-        Name (TNLP, 0x0008)
-        Name (CINT, Zero)
-        Name (PDCV, 0xFFFFFFFF)
-        Name (APSS, Package (0x0B)
-        {
-            Package (0x06)
-            {
-                0x0D49, 
-                0x00017318, 
-                0x000A, 
-                0x000A, 
-                0x2600, 
-                0x2600
-            }, 
-
-            Package (0x06)
-            {
-                0x0D48, 
-                0x00017318, 
-                0x000A, 
-                0x000A, 
-                0x2200, 
-                0x2200
-            }, 
-
-            Package (0x06)
-            {
-                0x0C80, 
-                0x000153D8, 
-                0x000A, 
-                0x000A, 
-                0x2000, 
-                0x2000
-            }, 
-
-            Package (0x06)
-            {
-                0x0BB8, 
-                0x00013880, 
-                0x000A, 
-                0x000A, 
-                0x1E00, 
-                0x1E00
-            }, 
-
-            Package (0x06)
-            {
-                0x0AF0, 
-                0x00011D28, 
-                0x000A, 
-                0x000A, 
-                0x1C00, 
-                0x1C00
-            }, 
-
-            Package (0x06)
-            {
-                0x0A28, 
-                0x000101D0, 
-                0x000A, 
-                0x000A, 
-                0x1A00, 
-                0x1A00
-            }, 
-
-            Package (0x06)
-            {
-                0x0960, 
-                0x0000EA60, 
-                0x000A, 
-                0x000A, 
-                0x1800, 
-                0x1800
-            }, 
-
-            Package (0x06)
-            {
-                0x0898, 
-                0x0000D2F0, 
-                0x000A, 
-                0x000A, 
-                0x1600, 
-                0x1600
-            }, 
-
-            Package (0x06)
-            {
-                0x07D0, 
-                0x0000BB80, 
-                0x000A, 
-                0x000A, 
-                0x1400, 
-                0x1400
-            }, 
-
-            Package (0x06)
-            {
-                0x0708, 
-                0x0000A410, 
-                0x000A, 
-                0x000A, 
-                0x1200, 
-                0x1200
-            }, 
-
-            Package (0x06)
-            {
-                0x0640, 
-                0x00008CA0, 
-                0x000A, 
-                0x000A, 
-                0x1000, 
-                0x1000
-            }
-        })
-        Name (PTCI, Package (0x02)
-        {
-            ResourceTemplate ()
-            {
-                Register (SystemIO, 
-                    0x04,               // Bit Width
-                    0x01,               // Bit Offset
-                    0x0000000000000410, // Address
-                    ,)
-            }, 
-
-            ResourceTemplate ()
-            {
-                Register (SystemIO, 
-                    0x04,               // Bit Width
-                    0x01,               // Bit Offset
-                    0x0000000000000410, // Address
-                    ,)
-            }
-        })
-        Name (\PSTE, Zero)
-        Name (\TSTE, Zero)
-        Name (TSSI, Package (0x01)
-        {
-            Package (0x05)
-            {
-                0x64, 
-                0x03E8, 
-                Zero, 
-                Zero, 
-                Zero
-            }
-        })
-        Name (TSSM, Package (0x08)
-        {
-            Package (0x05)
-            {
-                0x64, 
-                0x03E8, 
-                Zero, 
-                Zero, 
-                Zero
-            }, 
-
-            Package (0x05)
-            {
-                0x58, 
-                0x036B, 
-                Zero, 
-                0x1E, 
-                Zero
-            }, 
-
-            Package (0x05)
-            {
-                0x4B, 
-                0x02EE, 
-                Zero, 
-                0x1C, 
-                Zero
-            }, 
-
-            Package (0x05)
-            {
-                0x3F, 
-                0x0271, 
-                Zero, 
-                0x1A, 
-                Zero
-            }, 
-
-            Package (0x05)
-            {
-                0x32, 
-                0x01F4, 
-                Zero, 
-                0x18, 
-                Zero
-            }, 
-
-            Package (0x05)
-            {
-                0x26, 
-                0x0177, 
-                Zero, 
-                0x16, 
-                Zero
-            }, 
-
-            Package (0x05)
-            {
-                0x19, 
-                0xFA, 
-                Zero, 
-                0x14, 
-                Zero
-            }, 
-
-            Package (0x05)
-            {
-                0x0D, 
-                0x7D, 
-                Zero, 
-                0x12, 
-                Zero
-            }
-        })
-        Name (C1ST, Package (0x02)
-        {
-            One, 
-            Package (0x04)
-            {
-                ResourceTemplate ()
-                {
-                    Register (FFixedHW, 
-                        0x00,               // Bit Width
-                        0x00,               // Bit Offset
-                        0x0000000000000000, // Address
-                        ,)
-                }, 
-
-                0x01, 
-                0x01, 
-                0x03E8
-            }
-        })
-        Name (CMST, Package (0x03)
-        {
-            0x02, 
-            Package (0x04)
-            {
-                ResourceTemplate ()
-                {
-                    Register (FFixedHW, 
-                        0x01,               // Bit Width
-                        0x02,               // Bit Offset
-                        0x0000000000000000, // Address
-                        0x01,               // Access Size
-                        )
-                }, 
-
-                0x01, 
-                0x01, 
-                0x03E8
-            }, 
-
-            Package (0x04)
-            {
-                ResourceTemplate ()
-                {
-                    Register (FFixedHW, 
-                        0x01,               // Bit Width
-                        0x02,               // Bit Offset
-                        0x0000000000000020, // Address
-                        0x03,               // Access Size
-                        )
-                }, 
-
-                0x03, 
-                0x68, 
-                0x015E
-            }
-        })
-        Name (CIST, Package (0x03)
-        {
-            0x02, 
-            Package (0x04)
-            {
-                ResourceTemplate ()
-                {
-                    Register (FFixedHW, 
-                        0x00,               // Bit Width
-                        0x00,               // Bit Offset
-                        0x0000000000000000, // Address
-                        ,)
-                }, 
-
-                0x01, 
-                0x01, 
-                0x03E8
-            }, 
-
-            Package (0x04)
-            {
-                ResourceTemplate ()
-                {
-                    Register (SystemIO, 
-                        0x08,               // Bit Width
-                        0x00,               // Bit Offset
-                        0x0000000000000415, // Address
-                        ,)
-                }, 
-
-                0x03, 
-                0x68, 
-                0x015E
-            }
-        })
-        Method (CST, 0, NotSerialized)
-        {
-            If (LNotEqual (And (PDCV, 0x0200), 0x0200))
-            {
-                If (LEqual (NCST, 0x02))
-                {
-                    Store (One, NCST)
-                }
-            }
-
-            If (LEqual (NCST, Zero))
-            {
-                Return (C1ST)
-            }
-
-            If (LEqual (NCST, One))
-            {
-                Return (CIST)
-            }
-
-            If (LEqual (NCST, 0x02))
-            {
-                Return (CMST)
-            }
-
-            Return (C1ST)
-        }
-
-        Method (PDC, 1, NotSerialized)
-        {
-            CreateDWordField (Arg0, Zero, REVS)
-            CreateDWordField (Arg0, 0x04, SIZE)
-            Store (SizeOf (Arg0), Local0)
-            Store (Subtract (Local0, 0x08), Local1)
-            CreateField (Arg0, 0x40, Multiply (Local1, 0x08), TEMP)
-            Name (STS0, Buffer (0x04)
-            {
-                 0x00, 0x00, 0x00, 0x00
-            })
-            Concatenate (STS0, TEMP, Local2)
-            OSC (Buffer (0x10)
-                {
-                    /* 0000 */   0x16, 0xA6, 0x77, 0x40, 0x0C, 0x29, 0xBE, 0x47,
-                    /* 0008 */   0x9E, 0xBD, 0xD8, 0x70, 0x58, 0x71, 0x39, 0x53
-                }, REVS, SIZE, Local2)
-        }
-
-        Method (OSC, 4, NotSerialized)
-        {
-            CreateDWordField (Arg3, Zero, STS)
-            CreateDWordField (Arg3, 0x04, CAP)
-            CreateDWordField (Arg0, Zero, IID0)
-            CreateDWordField (Arg0, 0x04, IID1)
-            CreateDWordField (Arg0, 0x08, IID2)
-            CreateDWordField (Arg0, 0x0C, IID3)
-            Name (UID0, Buffer (0x10)
-            {
-                /* 0000 */   0x16, 0xA6, 0x77, 0x40, 0x0C, 0x29, 0xBE, 0x47,
-                /* 0008 */   0x9E, 0xBD, 0xD8, 0x70, 0x58, 0x71, 0x39, 0x53
-            })
-            CreateDWordField (UID0, Zero, EID0)
-            CreateDWordField (UID0, 0x04, EID1)
-            CreateDWordField (UID0, 0x08, EID2)
-            CreateDWordField (UID0, 0x0C, EID3)
-            If (LNot (LAnd (LAnd (LEqual (IID0, EID0), LEqual (IID1, EID1)), 
-                LAnd (LEqual (IID2, EID2), LEqual (IID3, EID3)))))
-            {
-                Store (0x06, Index (STS, Zero))
-                Return (Arg3)
-            }
-
-            And (PDCV, CAP, PDCV)
-            If (LEqual (CINT, Zero))
-            {
-                Store (One, CINT)
-                If (LEqual (And (PDCV, 0x09), 0x09))
-                {
-                    If (LNotEqual (NPSS, Zero))
-                    {
-                        Load (SSDT, HNDL)
-                    }
-                }
-
-                If (LEqual (And (PDCV, 0x10), 0x10))
-                {
-                    If (LNotEqual (NCST, 0xFF))
-                    {
-                        Load (CSDT, CHDL)
-                    }
-                }
-            }
-
-            Return (Arg3)
         }
     }
 
@@ -8914,15 +8080,32 @@ DefinitionBlock ("dsdt.aml", "DSDT", 2, "ALASKA", "A M I", 0x00000A06)
     {
         Scope (PCI0)
         {
+            Device (FWHD)
+            {
+                Name (_HID, EisaId ("INT0800"))
+                Name (_CRS, ResourceTemplate ()
+                {
+                    Memory32Fixed (ReadOnly,
+                        0xFF000000,         // Address Base
+                        0x01000000,         // Address Length
+                        )
+                })
+            }
+
             Device (HPET)
             {
                 Name (_HID, EisaId ("PNP0103"))
-                Name (CRS, ResourceTemplate ()
+                Name (_STA, 0x0F)
+                Name (_CRS, ResourceTemplate ()
                 {
+                    IRQNoFlags ()
+                        {0}
+                    IRQNoFlags ()
+                        {8}
                     Memory32Fixed (ReadWrite,
                         0xFED00000,         // Address Base
                         0x00000400,         // Address Length
-                        _Y24)
+                        )
                 })
                 OperationRegion (HCNT, SystemMemory, HPTC, 0x04)
                 Field (HCNT, DWordAcc, NoLock, Preserve)
@@ -8930,26 +8113,6 @@ DefinitionBlock ("dsdt.aml", "DSDT", 2, "ALASKA", "A M I", 0x00000A06)
                     HPTS,   2, 
                         ,   5, 
                     HPTE,   1
-                }
-
-                Method (_STA, 0, NotSerialized)
-                {
-                    If (HPTE)
-                    {
-                        Return (0x0F)
-                    }
-                    Else
-                    {
-                        Return (Zero)
-                    }
-                }
-
-                Method (_CRS, 0, NotSerialized)
-                {
-                    CreateDWordField (CRS, \_SB.PCI0.HPET._Y24._BAS, HTBS)
-                    Multiply (HPTS, 0x1000, Local0)
-                    Add (Local0, 0xFED00000, HTBS)
-                    Return (CRS)
                 }
             }
         }
@@ -8986,6 +8149,39 @@ DefinitionBlock ("dsdt.aml", "DSDT", 2, "ALASKA", "A M I", 0x00000A06)
         Store (OSFL (), AOTB)
         Store (Zero, AAXB)
         Store (One, \_SB.SLPS)
+    }
+
+    Method (DTGP, 5, NotSerialized)
+    {
+        If (LEqual (Arg0, Buffer (0x10)
+                {
+                    /* 0000 */    0xC6, 0xB7, 0xB5, 0xA0, 0x18, 0x13, 0x1C, 0x44, 
+                    /* 0008 */    0xB0, 0xC9, 0xFE, 0x69, 0x5E, 0xAF, 0x94, 0x9B
+                }))
+        {
+            If (LEqual (Arg1, One))
+            {
+                If (LEqual (Arg2, Zero))
+                {
+                    Store (Buffer (One)
+                        {
+                            0x03
+                        }, Arg4)
+                    Return (One)
+                }
+
+                If (LEqual (Arg2, One))
+                {
+                    Return (One)
+                }
+            }
+        }
+
+        Store (Buffer (One)
+            {
+                0x00
+            }, Arg4)
+        Return (Zero)
     }
 
     Method (_WAK, 1, NotSerialized)
@@ -9025,7 +8221,7 @@ DefinitionBlock ("dsdt.aml", "DSDT", 2, "ALASKA", "A M I", 0x00000A06)
 
     Scope (_SB.PCI0)
     {
-        Device (GFX0)
+        Device (IGPU)
         {
             Scope (^^PCI0)
             {
@@ -9038,7 +8234,7 @@ DefinitionBlock ("dsdt.aml", "DSDT", 2, "ALASKA", "A M I", 0x00000A06)
                 }
             }
 
-            Scope (\_SB.PCI0.GFX0)
+            Scope (\_SB.PCI0.IGPU)
             {
                 OperationRegion (IGDP, PCI_Config, 0x40, 0xC0)
                 Field (IGDP, AnyAcc, NoLock, Preserve)
@@ -9578,7 +8774,7 @@ DefinitionBlock ("dsdt.aml", "DSDT", 2, "ALASKA", "A M I", 0x00000A06)
                     }
                     Else
                     {
-                        Notify (GFX0, Arg1)
+                        Notify (IGPU, Arg1)
                     }
                 }
 
@@ -9588,7 +8784,7 @@ DefinitionBlock ("dsdt.aml", "DSDT", 2, "ALASKA", "A M I", 0x00000A06)
                 }
                 Else
                 {
-                    Notify (GFX0, 0x80)
+                    Notify (IGPU, 0x80)
                 }
 
                 Return (Zero)
@@ -9756,11 +8952,11 @@ DefinitionBlock ("dsdt.aml", "DSDT", 2, "ALASKA", "A M I", 0x00000A06)
     {
         Method (_L06, 0, NotSerialized)
         {
-            \_SB.PCI0.GFX0.GSCI ()
+            \_SB.PCI0.IGPU.GSCI ()
         }
     }
 
-    Scope (_SB.PCI0.GFX0)
+    Scope (_SB.PCI0.IGPU)
     {
         Name (_ADR, 0x00020000)
         Method (_DOS, 1, NotSerialized)
@@ -10480,7 +9676,7 @@ DefinitionBlock ("dsdt.aml", "DSDT", 2, "ALASKA", "A M I", 0x00000A06)
         }
     }
 
-    Device (_SB.PCI0.SBRG.TPM)
+    Device (_SB.PCI0.LPCB.TPM)
     {
         Name (_HID, EisaId ("PNP0C31"))
         Name (_STR, Unicode ("TPM 1.2 Device"))
@@ -10522,7 +9718,7 @@ DefinitionBlock ("dsdt.aml", "DSDT", 2, "ALASKA", "A M I", 0x00000A06)
         }
     }
 
-    Scope (_SB.PCI0.SBRG.TPM)
+    Scope (_SB.PCI0.LPCB.TPM)
     {
         OperationRegion (TSMI, SystemIO, SMIT, 0x02)
         Field (TSMI, ByteAcc, NoLock, Preserve)
@@ -10539,9 +9735,9 @@ DefinitionBlock ("dsdt.aml", "DSDT", 2, "ALASKA", "A M I", 0x00000A06)
                         /* 0008 */   0xA4, 0x24, 0x8D, 0x10, 0x08, 0x9D, 0x16, 0x53
                     }))
             {
-                Name (_T_0, Zero)
-                Store (ToInteger (Arg2), _T_0)
-                If (LEqual (_T_0, Zero))
+                Name (T_0, Zero)
+                Store (ToInteger (Arg2), T_0)
+                If (LEqual (T_0, Zero))
                 {
                     Return (Buffer (One)
                     {
@@ -10550,13 +9746,13 @@ DefinitionBlock ("dsdt.aml", "DSDT", 2, "ALASKA", "A M I", 0x00000A06)
                 }
                 Else
                 {
-                    If (LEqual (_T_0, One))
+                    If (LEqual (T_0, One))
                     {
                         Return ("1.0")
                     }
                     Else
                     {
-                        If (LEqual (_T_0, 0x02))
+                        If (LEqual (T_0, 0x02))
                         {
                             ToInteger (DerefOf (Index (Arg3, Zero)), TMF2)
                             Store (0x12, TMF1)
@@ -10578,7 +9774,7 @@ DefinitionBlock ("dsdt.aml", "DSDT", 2, "ALASKA", "A M I", 0x00000A06)
                         }
                         Else
                         {
-                            If (LEqual (_T_0, 0x03))
+                            If (LEqual (T_0, 0x03))
                             {
                                 Name (PPI1, Package (0x02)
                                 {
@@ -10597,13 +9793,13 @@ DefinitionBlock ("dsdt.aml", "DSDT", 2, "ALASKA", "A M I", 0x00000A06)
                             }
                             Else
                             {
-                                If (LEqual (_T_0, 0x04))
+                                If (LEqual (T_0, 0x04))
                                 {
                                     Return (One)
                                 }
                                 Else
                                 {
-                                    If (LEqual (_T_0, 0x05))
+                                    If (LEqual (T_0, 0x05))
                                     {
                                         Name (PPI2, Package (0x03)
                                         {
@@ -10647,7 +9843,7 @@ DefinitionBlock ("dsdt.aml", "DSDT", 2, "ALASKA", "A M I", 0x00000A06)
                                     }
                                     Else
                                     {
-                                        If (LEqual (_T_0, 0x06))
+                                        If (LEqual (T_0, 0x06))
                                         {
                                             Return (Zero)
                                         }
@@ -10669,9 +9865,9 @@ DefinitionBlock ("dsdt.aml", "DSDT", 2, "ALASKA", "A M I", 0x00000A06)
                             /* 0008 */   0x90, 0x1C, 0x47, 0x56, 0xD7, 0xF2, 0xD4, 0x5D
                         }))
                 {
-                    Name (_T_1, Zero)
-                    Store (ToInteger (Arg2), _T_1)
-                    If (LEqual (_T_1, Zero))
+                    Name (T_1, Zero)
+                    Store (ToInteger (Arg2), T_1)
+                    If (LEqual (T_1, Zero))
                     {
                         Return (Buffer (One)
                         {
@@ -10680,7 +9876,7 @@ DefinitionBlock ("dsdt.aml", "DSDT", 2, "ALASKA", "A M I", 0x00000A06)
                     }
                     Else
                     {
-                        If (LEqual (_T_1, One))
+                        If (LEqual (T_1, One))
                         {
                             Store (0x22, TMF1)
                             Store (TMF1, DAT)
@@ -10781,9 +9977,9 @@ DefinitionBlock ("dsdt.aml", "DSDT", 2, "ALASKA", "A M I", 0x00000A06)
                         /* 0008 */   0xA4, 0x24, 0x8D, 0x10, 0x08, 0x9D, 0x16, 0x53
                     }))
             {
-                Name (_T_0, Zero)
-                Store (ToInteger (Arg2), _T_0)
-                If (LEqual (_T_0, Zero))
+                Name (T_0, Zero)
+                Store (ToInteger (Arg2), T_0)
+                If (LEqual (T_0, Zero))
                 {
                     Return (Buffer (One)
                     {
@@ -10792,13 +9988,13 @@ DefinitionBlock ("dsdt.aml", "DSDT", 2, "ALASKA", "A M I", 0x00000A06)
                 }
                 Else
                 {
-                    If (LEqual (_T_0, One))
+                    If (LEqual (T_0, One))
                     {
                         Return ("1.0")
                     }
                     Else
                     {
-                        If (LEqual (_T_0, 0x02))
+                        If (LEqual (T_0, 0x02))
                         {
                             ToInteger (DerefOf (Index (Arg3, Zero)), TMF2)
                             Store (0x12, TMF1)
@@ -10820,7 +10016,7 @@ DefinitionBlock ("dsdt.aml", "DSDT", 2, "ALASKA", "A M I", 0x00000A06)
                         }
                         Else
                         {
-                            If (LEqual (_T_0, 0x03))
+                            If (LEqual (T_0, 0x03))
                             {
                                 Name (PPI1, Package (0x02)
                                 {
@@ -10839,13 +10035,13 @@ DefinitionBlock ("dsdt.aml", "DSDT", 2, "ALASKA", "A M I", 0x00000A06)
                             }
                             Else
                             {
-                                If (LEqual (_T_0, 0x04))
+                                If (LEqual (T_0, 0x04))
                                 {
                                     Return (One)
                                 }
                                 Else
                                 {
-                                    If (LEqual (_T_0, 0x05))
+                                    If (LEqual (T_0, 0x05))
                                     {
                                         Name (PPI2, Package (0x03)
                                         {
@@ -10889,7 +10085,7 @@ DefinitionBlock ("dsdt.aml", "DSDT", 2, "ALASKA", "A M I", 0x00000A06)
                                     }
                                     Else
                                     {
-                                        If (LEqual (_T_0, 0x06))
+                                        If (LEqual (T_0, 0x06))
                                         {
                                             Return (Zero)
                                         }
@@ -10911,9 +10107,9 @@ DefinitionBlock ("dsdt.aml", "DSDT", 2, "ALASKA", "A M I", 0x00000A06)
                             /* 0008 */   0x90, 0x1C, 0x47, 0x56, 0xD7, 0xF2, 0xD4, 0x5D
                         }))
                 {
-                    Name (_T_1, Zero)
-                    Store (ToInteger (Arg2), _T_1)
-                    If (LEqual (_T_1, Zero))
+                    Name (T_1, Zero)
+                    Store (ToInteger (Arg2), T_1)
+                    If (LEqual (T_1, Zero))
                     {
                         Return (Buffer (One)
                         {
@@ -10922,7 +10118,7 @@ DefinitionBlock ("dsdt.aml", "DSDT", 2, "ALASKA", "A M I", 0x00000A06)
                     }
                     Else
                     {
-                        If (LEqual (_T_1, One))
+                        If (LEqual (T_1, One))
                         {
                             Store (0x22, TMF1)
                             Store (TMF1, DAT)
@@ -11007,104 +10203,104 @@ DefinitionBlock ("dsdt.aml", "DSDT", 2, "ALASKA", "A M I", 0x00000A06)
     {
         If (Arg0)
         {
-            \_SB.PCI0.SBRG.SPTS (Arg0)
-            \_SB.PCI0.PEX0.SPRT (Arg0)
-            \_SB.PCI0.PEX1.SPRT (Arg0)
-            \_SB.PCI0.PEX2.SPRT (Arg0)
-            \_SB.PCI0.PEX3.SPRT (Arg0)
-            \_SB.PCI0.PEX4.SPRT (Arg0)
-            \_SB.PCI0.PEX5.SPRT (Arg0)
-            \_SB.PCI0.PEX6.SPRT (Arg0)
-            \_SB.PCI0.PEX7.SPRT (Arg0)
-            \_SB.PCI0.GFX0.OPTS (Arg0)
-            \_SB.PCI0.SBRG.SIOS (Arg0)
+            \_SB.PCI0.LPCB.SPTS (Arg0)
+            \_SB.PCI0.RP01.SPRT (Arg0)
+            \_SB.PCI0.RP02.SPRT (Arg0)
+            \_SB.PCI0.RP03.SPRT (Arg0)
+            \_SB.PCI0.RP04.SPRT (Arg0)
+            \_SB.PCI0.RP05.SPRT (Arg0)
+            \_SB.PCI0.RP06.SPRT (Arg0)
+            \_SB.PCI0.RP07.SPRT (Arg0)
+            \_SB.PCI0.RP08.SPRT (Arg0)
+            \_SB.PCI0.IGPU.OPTS (Arg0)
+            \_SB.PCI0.LPCB.SIOS (Arg0)
         }
     }
 
     Method (WAK, 1, NotSerialized)
     {
-        \_SB.PCI0.SBRG.SWAK (Arg0)
-        If (\_SB.PCI0.PEX0.PMS)
+        \_SB.PCI0.LPCB.SWAK (Arg0)
+        If (\_SB.PCI0.RP01.PMS)
         {
-            \_SB.PCI0.PEX0.WPRT (Arg0)
-            Notify (\_SB.PCI0.PEX0, 0x02)
+            \_SB.PCI0.RP01.WPRT (Arg0)
+            Notify (\_SB.PCI0.RP01, 0x02)
         }
         Else
         {
-            \_SB.PCI0.PEX0.WPRT (Arg0)
+            \_SB.PCI0.RP01.WPRT (Arg0)
         }
 
-        If (\_SB.PCI0.PEX1.PMS)
+        If (\_SB.PCI0.RP02.PMS)
         {
-            \_SB.PCI0.PEX1.WPRT (Arg0)
-            Notify (\_SB.PCI0.PEX1, 0x02)
+            \_SB.PCI0.RP02.WPRT (Arg0)
+            Notify (\_SB.PCI0.RP02, 0x02)
         }
         Else
         {
-            \_SB.PCI0.PEX1.WPRT (Arg0)
+            \_SB.PCI0.RP02.WPRT (Arg0)
         }
 
-        If (\_SB.PCI0.PEX2.PMS)
+        If (\_SB.PCI0.RP03.PMS)
         {
-            \_SB.PCI0.PEX2.WPRT (Arg0)
-            Notify (\_SB.PCI0.PEX2, 0x02)
+            \_SB.PCI0.RP03.WPRT (Arg0)
+            Notify (\_SB.PCI0.RP03, 0x02)
         }
         Else
         {
-            \_SB.PCI0.PEX2.WPRT (Arg0)
+            \_SB.PCI0.RP03.WPRT (Arg0)
         }
 
-        If (\_SB.PCI0.PEX3.PMS)
+        If (\_SB.PCI0.RP04.PMS)
         {
-            \_SB.PCI0.PEX3.WPRT (Arg0)
-            Notify (\_SB.PCI0.PEX3, 0x02)
+            \_SB.PCI0.RP04.WPRT (Arg0)
+            Notify (\_SB.PCI0.RP04, 0x02)
         }
         Else
         {
-            \_SB.PCI0.PEX3.WPRT (Arg0)
+            \_SB.PCI0.RP04.WPRT (Arg0)
         }
 
-        If (\_SB.PCI0.PEX4.PMS)
+        If (\_SB.PCI0.RP05.PMS)
         {
-            \_SB.PCI0.PEX4.WPRT (Arg0)
-            Notify (\_SB.PCI0.PEX4, 0x02)
+            \_SB.PCI0.RP05.WPRT (Arg0)
+            Notify (\_SB.PCI0.RP05, 0x02)
         }
         Else
         {
-            \_SB.PCI0.PEX4.WPRT (Arg0)
+            \_SB.PCI0.RP05.WPRT (Arg0)
         }
 
-        If (\_SB.PCI0.PEX5.PMS)
+        If (\_SB.PCI0.RP06.PMS)
         {
-            \_SB.PCI0.PEX5.WPRT (Arg0)
-            Notify (\_SB.PCI0.PEX5, 0x02)
+            \_SB.PCI0.RP06.WPRT (Arg0)
+            Notify (\_SB.PCI0.RP06, 0x02)
         }
         Else
         {
-            \_SB.PCI0.PEX5.WPRT (Arg0)
+            \_SB.PCI0.RP06.WPRT (Arg0)
         }
 
-        If (\_SB.PCI0.PEX6.PMS)
+        If (\_SB.PCI0.RP07.PMS)
         {
-            \_SB.PCI0.PEX6.WPRT (Arg0)
-            Notify (\_SB.PCI0.PEX6, 0x02)
+            \_SB.PCI0.RP07.WPRT (Arg0)
+            Notify (\_SB.PCI0.RP07, 0x02)
         }
         Else
         {
-            \_SB.PCI0.PEX6.WPRT (Arg0)
+            \_SB.PCI0.RP07.WPRT (Arg0)
         }
 
-        If (\_SB.PCI0.PEX7.PMS)
+        If (\_SB.PCI0.RP08.PMS)
         {
-            \_SB.PCI0.PEX7.WPRT (Arg0)
-            Notify (\_SB.PCI0.PEX7, 0x02)
+            \_SB.PCI0.RP08.WPRT (Arg0)
+            Notify (\_SB.PCI0.RP08, 0x02)
         }
         Else
         {
-            \_SB.PCI0.PEX7.WPRT (Arg0)
+            \_SB.PCI0.RP08.WPRT (Arg0)
         }
 
-        \_SB.PCI0.GFX0.OWAK (Arg0)
-        \_SB.PCI0.SBRG.SIOW (Arg0)
+        \_SB.PCI0.IGPU.OWAK (Arg0)
+        \_SB.PCI0.LPCB.SIOW (Arg0)
     }
 }
